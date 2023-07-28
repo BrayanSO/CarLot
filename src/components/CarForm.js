@@ -24,6 +24,9 @@ function CarForm() {
 
         <label htmlFor="imageURL">URL de la imagen:</label>
         <input type="text" id="imageURL" value={imageURL} onChange={(e) => setImageURL(e.target.value)} required />
+        
+        <label htmlFor="imageURL">URL de la imagen:</label>
+        <input type="text" id="imageURL" value={imageURL} onChange={(e) => setImageURL(e.target.value)} required />
 
         <button type="submit">Guardar</button>
       </form>
