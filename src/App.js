@@ -8,7 +8,6 @@ function App() {
     <div>
       <Header />
       <CarList />
-      <CarForm />
     </div>
   );
 }
