@@ -1,13 +1,16 @@
 import React from 'react';
-import Header from './components/Header';
-import CarList from './components/CarList';
-import CarForm from './components/CarForm';
+import 'bootstrap/dist/css/bootstrap.min.css'; // Importa los estilos CSS de Bootstrap
+import CarList from "./components/CarList.jsx";
+import CarForm from './components/CarForm.jsx';
+import Header from './components/Header.js';
 
 function App() {
   return (
     <div>
-      <Header />
+      <Header/>
       <CarList />
+      <hr />
+      <CarForm />
     </div>
   );
 }
