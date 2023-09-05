@@ -13,7 +13,7 @@ function Header() {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Link href="#home">Home</Nav.Link>
+              <Nav.Link as={Link}to="/">Home</Nav.Link>
               {/* Usa el componente Link para redireccionar a Register */}
               <Nav.Link as={Link} to="/Register">Login</Nav.Link>
             </Nav>
