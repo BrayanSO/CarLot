@@ -15,6 +15,11 @@ const Register = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    localStorage.setItem('user', JSON.stringify(userData));
+  
+  // Limpia el formulario
+  setUserData({ email: '', contraseña: '' });
+    
     // Aquí puedes agregar la lógica para enviar los datos del usuario al servidor o almacenarlos localmente
     console.log('Datos del usuario registrados:', userData);
   };

@@ -9,13 +9,11 @@ function Header() {
     <header>
       <Navbar expand="lg" className="bg-body-tertiary">
         <Container>
-          <Navbar.Brand href="#home">CarLot</Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
               <Nav.Link as={Link}to="/">Home</Nav.Link>
               {/* Usa el componente Link para redireccionar a Register */}
-              <Nav.Link as={Link} to="/Register">Login</Nav.Link>
+              <Nav.Link as={Link} to="/LoginForm">Login</Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>

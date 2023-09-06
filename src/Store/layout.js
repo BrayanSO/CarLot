@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import App from "../App";
 import Header from '../components/Header'
 import FormUser from "../pages/FormUser"
+import LoginForm from "../components/Login";
 
 //create your first component
 const Layout = () => {
@@ -18,6 +19,7 @@ const Layout = () => {
             <Route element={<App />} path="/" />
             <Route element={<h1>Not found!</h1>} path="*" />
             <Route element={<FormUser />} path="/Register" />
+            <Route element={<LoginForm/>} path="/LoginForm"/>
           </Routes>
       
       </BrowserRouter>
