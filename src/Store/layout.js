@@ -4,6 +4,7 @@ import App from "../App";
 import Header from '../components/Header'
 import FormUser from "../pages/FormUser"
 import LoginForm from "../components/Login";
+import CarForm from "../pages/CarForm";
 
 //create your first component
 const Layout = () => {
@@ -20,6 +21,7 @@ const Layout = () => {
             <Route element={<h1>Not found!</h1>} path="*" />
             <Route element={<FormUser />} path="/Register" />
             <Route element={<LoginForm/>} path="/LoginForm"/>
+            <Route element={<CarForm/>} path="/CarForm"/>
           </Routes>
       
       </BrowserRouter>

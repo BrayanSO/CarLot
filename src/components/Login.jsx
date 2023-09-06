@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 const LoginForm = () => {
   const [loginData, setLoginData] = useState({
@@ -14,26 +15,30 @@ const LoginForm = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-      // Obtiene los datos de usuario almacenados en localStorage
-  const storedUser = localStorage.getItem('user');
-  
-  // Verifica si los datos de inicio de sesión coinciden con los datos almacenados
-  if (storedUser) {
-    const storedUserData = JSON.parse(storedUser);
-    if (loginData.email === storedUserData.email && loginData.contraseña === storedUserData.contraseña) {
-      // El inicio de sesión es exitoso
-      console.log('Inicio de sesión exitoso');
+    
+    // Obtiene los datos de usuario almacenados en localStorage
+    const storedUser = localStorage.getItem('user');
+    
+    // Verifica si los datos de inicio de sesión coinciden con los datos almacenados
+    if (storedUser) {
+      const storedUserData = JSON.parse(storedUser);
+      if (loginData.email === storedUserData.email && loginData.contraseña === storedUserData.contraseña) {
+        // El inicio de sesión es exitoso
+        console.log('Inicio de sesión exitoso');
+        return; // Sale de la función para evitar la ejecución posterior
+      } else {
+        // Datos de inicio de sesión incorrectos
+        console.log('Datos de inicio de sesión incorrectos');
+      }
     } else {
-      // Datos de inicio de sesión incorrectos
-      console.log('Datos de inicio de sesión incorrectos');
+      // No se encontraron datos de usuario
+      console.log('Usuario no registrado');
     }
-  } else {
-    // No se encontraron datos de usuario
-    console.log('Usuario no registrado');
-};
+    
     // Aquí puedes agregar la lógica para enviar los datos de inicio de sesión al servidor y autenticar al usuario
     console.log('Datos de inicio de sesión:', loginData);
   };
+  
 
   return (
     <div>
@@ -60,10 +65,12 @@ const LoginForm = () => {
             required
           />
         </Form.Group>
-
+        <Link to= "/CarForm">
         <Button variant="primary" type="submit">
+            
           Iniciar Sesión
         </Button>
+        </Link>
       </Form>
     </div>
   );

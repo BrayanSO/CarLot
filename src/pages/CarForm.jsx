@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import "../Styles/CarFstyle.css"
 
 const CarForm = () => {
   const [formData, setFormData] = useState({ brand: '', model: '', price: '' });
@@ -18,22 +19,27 @@ const CarForm = () => {
   };
 
   return (
-    <div>
+    <div className="car-form-container">
       <h1>Publicar Anuncio</h1>
-      <form>
-        <label>Marca:</label>
-        <input type="text" name="brand" value={formData.brand} onChange={handleInputChange} />
-        <br />
+      <form className="car-form">
+        <div className="form-group">
+          <label>Marca:</label>
+          <input type="text" name="brand" value={formData.brand} onChange={handleInputChange} />
+        </div>
 
-        <label>Modelo:</label>
-        <input type="text" name="model" value={formData.model} onChange={handleInputChange} />
-        <br />
+        <div className="form-group">
+          <label>Modelo:</label>
+          <input type="text" name="model" value={formData.model} onChange={handleInputChange} />
+        </div>
 
-        <label>Precio:</label>
-        <input type="number" name="price" value={formData.price} onChange={handleInputChange} />
-        <br />
+        <div className="form-group">
+          <label>Precio:</label>
+          <input type="number" name="price" value={formData.price} onChange={handleInputChange} />
+        </div>
 
-        <button type="button" onClick={handleSubmit}>Publicar Anuncio</button>
+        <button type="button" onClick={handleSubmit} className="submit-button">
+          Publicar Anuncio
+        </button>
       </form>
     </div>
   );
