@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import "../Styles/CarListSyle.css";
+import EditCarModal from "../pages/CarEditForm.jsx" // Importa tu componente de edición de automóviles
+
 
 const CarList = () => {
   const [cars, setCars] = useState([]);
-
+  const [editIndex, setEditIndex] = useState(null); // Estado para rastrear el índice del automóvil en edición
+  const [showEditModal, setShowEditModal] = useState(false);
   useEffect(() => {
     // Obtener la lista de autos desde el almacenamiento local
     const savedCars = JSON.parse(localStorage.getItem('cars')) || [];
@@ -20,6 +23,25 @@ const CarList = () => {
     localStorage.setItem('cars', JSON.stringify(updatedCars));
   };
 
+  const handleEditClick = (index) => {
+    // Establece el índice del automóvil en edición
+    setEditIndex(index);
+    // Muestra el modal de edición
+    setShowEditModal(true);
+  };
+  
+
+  const handleEditSave = (editedCar) => {
+    // Actualiza la lista de automóviles con los cambios realizados
+    const updatedCars = [...cars];
+    updatedCars[editIndex] = editedCar;
+    setCars(updatedCars);
+    setEditIndex(null); // Sale del modo de edición
+
+    // Actualiza el almacenamiento local
+    localStorage.setItem('cars', JSON.stringify(updatedCars));
+  };
+
   return (
     <div className="car-list-container">
       <h1>Inventory</h1>
@@ -28,12 +50,25 @@ const CarList = () => {
           <div key={index} className="car-card">
             <img src={car.image} alt={`${car.brand} ${car.model}`} />
             <div className="car-info">
-              <p>{`Marca: ${car.brand} - Modelo: ${car.model} - Precio: $${car.price} - Estilo: ${car.style}`}</p>
-              <button onClick={() => handleDeleteClick(index)}>Eliminar</button>
+              <p>
+                <strong>Marca:</strong> {car.brand} <br />
+                <strong>Modelo:</strong> {car.model} <br />
+                <strong>Precio:</strong> ${car.price}
+              </p>
+              <button onClick={() => handleDeleteClick(index)}>Eliminate</button>
+              <button onClick={() => handleEditClick(index)}>Edit</button>
             </div>
           </div>
         ))}
       </ul>
+      {editIndex !== null && (
+  <EditCarModal
+    show={showEditModal}
+    onHide={() => setShowEditModal(false)}
+    car={cars[editIndex]}
+    onSave={handleEditSave}
+  />
+      )}
     </div>
   );
 };

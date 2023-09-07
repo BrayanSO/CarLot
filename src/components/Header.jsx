@@ -11,7 +11,7 @@ function Header() {
         <Container>
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Link as={Link}to="/">Home</Nav.Link>
+              <Nav.Link as={Link}to="/">Carlot</Nav.Link>
               {/* Usa el componente Link para redireccionar a Register */}
               <Nav.Link as={Link} to="/LoginForm">Login</Nav.Link>
             </Nav>

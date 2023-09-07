@@ -1,7 +1,7 @@
 /* CarListStyle.css */
 
 .car-list-container {
-    max-width: 800px;
+    max-width: 30%;
     margin: 0 auto;
     padding: 20px;
     background-color: #f0f0f0;
@@ -31,6 +31,7 @@
   
   .car-info p {
     margin-top: 10px;
+    align-items: start;
   }
   
   button {
