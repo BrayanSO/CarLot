@@ -11,7 +11,7 @@ const CarList = () => {
 
   return (
     <div>
-      <h1>Listado de Autos</h1>
+      <h1>Inventory</h1>
       <ul>
         {cars.map((car, index) => (
           <div key={index}>{car.brand} - {car.model} - ${car.price}</div>

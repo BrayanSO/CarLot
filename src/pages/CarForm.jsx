@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import "../Styles/CarFstyle.css"
 
 const CarForm = () => {
-  const [formData, setFormData] = useState({ brand: '', model: '', price: '' });
+  const [formData, setFormData] = useState({ brand: '', style: '' , model: '', price: ''});
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -15,7 +15,7 @@ const CarForm = () => {
     savedCars.push(formData);
     localStorage.setItem('cars', JSON.stringify(savedCars));
     // Limpiar el formulario
-    setFormData({ brand: '', model: '', price: '' });
+    setFormData({ brand: '', style: '' , model: '', price: '' });
   };
 
   return (
@@ -23,12 +23,16 @@ const CarForm = () => {
       <h1>Publicar Anuncio</h1>
       <form className="car-form">
         <div className="form-group">
-          <label>Marca:</label>
+          <label>Brand:</label>
           <input type="text" name="brand" value={formData.brand} onChange={handleInputChange} />
+        </div>
+        <div className="form-group">
+          <label>Styel:</label>
+          <input type="text" name="style" value={formData.style} onChange={handleInputChange} />
         </div>
 
         <div className="form-group">
-          <label>Modelo:</label>
+          <label>Model:</label>
           <input type="text" name="model" value={formData.model} onChange={handleInputChange} />
         </div>
 
