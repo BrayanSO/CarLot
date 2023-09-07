@@ -1,0 +1,31 @@
+/* LoginFormStyle.css */
+
+
+.login-form-container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 2px solid #007bff; /* Color del borde */
+  border-radius: 5px;
+  background-color: #f8f9fa; /* Color de fondo */
+}
+
+.login-form-container h2 {
+  text-align: center;
+  color: #2bff00; /* Color del título */
+}
+
+.form-group label {
+  color: #007bff; /* Color de las etiquetas de formulario */
+}
+
+.button-container {
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* Cambiar el color del botón */
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+}

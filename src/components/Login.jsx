@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import "../Styles/LoginStyle.css"
 
 const LoginForm = () => {
   const [loginData, setLoginData] = useState({
@@ -41,11 +42,11 @@ const LoginForm = () => {
   
 
   return (
-    <div>
+    <div className="login-form-container">
       <h2>Iniciar Sesión</h2>
       <Form onSubmit={handleSubmit}>
         <Form.Group controlId="email">
-          <Form.Label>email</Form.Label>
+          <Form.Label>Email</Form.Label>
           <Form.Control
             type="email"
             name="email"
@@ -54,9 +55,9 @@ const LoginForm = () => {
             required
           />
         </Form.Group>
-
+  
         <Form.Group controlId="contraseña">
-          <Form.Label>password</Form.Label>
+          <Form.Label>Password</Form.Label>
           <Form.Control
             type="password"
             name="contraseña"
@@ -65,15 +66,18 @@ const LoginForm = () => {
             required
           />
         </Form.Group>
-        <Link to= "/CarForm">
-        <Button variant="primary" type="submit">
-            
-          Iniciar Sesión
-        </Button>
-        </Link>
+  
+        <div className="button-container">
+          <Link to="/CarForm">
+            <Button variant="primary" type="submit">
+              Iniciar Sesión
+            </Button>
+          </Link>
+        </div>
       </Form>
     </div>
   );
+  
 };
 
 export default LoginForm;
