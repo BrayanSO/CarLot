@@ -8,7 +8,6 @@ function CarCard({ car, onDeleteClick, onDetailsClick }) {
       <button onClick={() => onDeleteClick(car)}>Eliminar</button>
       <button onClick={() => onDetailsClick(car)}>Detalles</button>
     </div>
-    
   );
 }
 

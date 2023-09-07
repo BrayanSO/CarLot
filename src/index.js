@@ -1,12 +1,13 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client'; // Importa createRoot desde 'react-dom/client'
 
 import '../src/Styles/index.css'; // Si deseas agregar estilos globales
 import Layout from './Store/layout';
 
-ReactDOM.render(
+const root = createRoot(document.getElementById('root'));
+
+root.render(
   <React.StrictMode>
-    <Layout/>
-  </React.StrictMode>,
-  document.getElementById('root')
+    <Layout />
+  </React.StrictMode>
 );
