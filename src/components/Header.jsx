@@ -9,15 +9,18 @@ import "../Styles/Header.css"
 function Header() {
   return (
     <header>
-      <Navbar expand="lg" className="bg-body-tertiary">
+      <Navbar  className="nav-pills nav-stacked">
         <Container>
-          <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="me-auto">
+            <Nav className="justify-content-center">
+              <div className='logo'>
               <Nav.Link as={Link}to="/"><img src={CarLogo} alt="Logo"></img></Nav.Link>
+              </div>
               {/* Usa el componente Link para redireccionar a Register */}
-              <Nav.Link as={Link} to="/LoginForm">Login</Nav.Link>
+              <div className='login'>
+              <Nav.Link as={Link} to="/LoginForm"><p>Login</p></Nav.Link>
+              </div>
             </Nav>
-          </Navbar.Collapse>
+          
         </Container>
       </Navbar>
     </header>

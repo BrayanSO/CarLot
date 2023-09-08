@@ -1,11 +1,10 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import App from "../App";
-import Header from '../components/Header'
 import FormUser from "../pages/FormUser"
 import LoginForm from "../components/Login";
 import CarForm from "../pages/CarForm";
-
+import Header from "../components/Header"
 //create your first component
 const Layout = () => {
   //the basename is used when your project is published in a subdirectory and not in the root of the domain
@@ -14,8 +13,7 @@ const Layout = () => {
   return (
     <div>
       <BrowserRouter basename={basename}>
-       
-          <Header />
+      <Header/>
           <Routes>
             <Route element={<App />} path="/" />
             <Route element={<h1>Not found!</h1>} path="*" />
