@@ -25,14 +25,14 @@ const CarForm = () => {
 
   return (
     <div className="car-form-container">
-      <h1>Publicar Anuncio</h1>
+      <h1>Post new ad</h1>
       <form className="car-form">
         <div className="form-group">
           <label>Brand:</label>
           <input type="text" name="brand" value={formData.brand} onChange={handleInputChange} />
         </div>
         <div className="form-group">
-          <label>Style:</label>
+          <label>Style:    </label>
           <input type="text" name="style" value={formData.style} onChange={handleInputChange} />
         </div>
 
@@ -42,8 +42,8 @@ const CarForm = () => {
         </div>
 
         <div className="form-group">
-          <label>Precio:</label>
-          <input type="number" name="price" value={formData.price} onChange={handleInputChange} />
+          <label>Price:</label>
+          <input type="number"  placeholder="$" name="price" value={formData.price} onChange={handleInputChange} />
         </div>
         <div className="form-group">
           <label>Image:</label>
