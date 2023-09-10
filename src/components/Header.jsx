@@ -17,7 +17,7 @@ function Header() {
               </div>
               {/* Usa el componente Link para redireccionar a Register */}
               <div className='login'>
-              <Nav.Link as={Link} to="/LoginForm"><p>Login</p></Nav.Link>
+            {/* <Nav.Link as={Link} to="/LoginForm"><p>Login</p></Nav.Link> */}
               </div>
             </Nav>
           
