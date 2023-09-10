@@ -1,5 +1,4 @@
 import React from 'react';
-import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import { Link } from 'react-router-dom';
@@ -9,8 +8,8 @@ import "../Styles/Header.css"
 function Header() {
   return (
     <header>
-      <Navbar  className="nav-pills nav-stacked">
-        <Container>
+      <Navbar  className="nav-pills nav-stacked justify-content-center">
+       
             <Nav className="justify-content-center">
               <div className='logo'>
               <Nav.Link as={Link}to="/"><img src={CarLogo} alt="Logo"></img></Nav.Link>
@@ -21,7 +20,7 @@ function Header() {
               </div>
             </Nav>
           
-        </Container>
+        
       </Navbar>
     </header>
   );

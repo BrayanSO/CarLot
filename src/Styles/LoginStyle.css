@@ -3,11 +3,12 @@
 
 .login-form-container {
   max-width: 400px;
-  margin: 100px;
+  margin: auto;
   padding: 20px;
   border: 2px solid #007bff; /* Color del borde */
   border-radius: 5px;
   background-color: #f8f9fa; /* Color de fondo */
+  justify-content: center;
 }
 
 .login-form-container h2 {
@@ -22,6 +23,7 @@
 .button-container {
   text-align: center;
   margin-top: 20px;
+  justify-content: center;
 }
 
 /* Cambiar el color del botón */

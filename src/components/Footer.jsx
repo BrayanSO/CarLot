@@ -1,10 +1,11 @@
 import React from 'react';
 import { MDBFooter, MDBContainer } from 'mdb-react-ui-kit';
 import { Link } from 'react-router-dom';
+import "../Styles/FooterStyles.css"
 
 export default function App() {
   return (
-    <MDBFooter className='text-center text-white' style={{ backgroundColor: 'grey' }}>
+    <MDBFooter className=' footerSt text-center text-white' style={{ backgroundColor: 'grey' }}>
       <MDBContainer className='p-4'></MDBContainer>
 
       <div className='text-center p-3' style={{ backgroundColor: 'grey' }}>
