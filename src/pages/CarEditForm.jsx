@@ -21,8 +21,8 @@ const CarEditForm = ({ car, onSave, onCancel }) => {
           <label>Marca:</label>
           <input
             type="text"
-            name="brand"
-            value={editedCar.brand}
+            name="make"
+            value={editedCar.make}
             onChange={handleInputChange}
           />
         </div>

@@ -68,7 +68,7 @@ const LoginForm = () => {
         </Form.Group>
   
         <div className="button-container">
-          <Link to="/CarForm">
+          <Link to="/Identify">
             <Button variant="primary" type="submit">
               Iniciar Sesión
             </Button>

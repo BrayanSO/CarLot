@@ -48,10 +48,10 @@ const CarList = () => {
       <ul>
         {cars.map((car, index) => (
           <div key={index} className="car-card">
-            <img src={car.image} alt={`${car.brand} ${car.model}`} />
+            <img src={car.image} alt={`${car.make} ${car.model}`} />
             <div className="car-info">
               <p>
-                <strong>Marca:</strong> {car.brand} <br />
+                <strong>Marca:</strong> {car.make} <br />
                 <strong>Modelo:</strong> {car.model} <br />
                 <strong>Precio:</strong> ${car.price}
               </p>
