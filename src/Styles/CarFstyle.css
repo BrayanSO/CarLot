@@ -1,45 +1,72 @@
 /* styles.css */
+/* CarFstyle.css */
 
 .car-form-container {
   max-width: 400px;
   margin: 0 auto;
   padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #fff;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
 }
 
-.car-form {
-  display: flex;
-  flex-direction: column;
+.car-form h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
 }
 
-.form-group {
-  margin-bottom: 10px;
+.car-form .form-group {
+  margin-bottom: 20px;
+  text-align: left;
 }
 
-label {
-  font-weight: bold;
+.car-form label {
+  display: block;
+  font-size: 16px;
+  margin-bottom: 5px;
+  color: #555;
 }
 
-input[type="text"],
-input[type="number"] {
+.car-form select,
+.car-form input[type="text"],
+.car-form input[type="number"] {
+  width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
-  border-radius: 3px;
+  border-radius: 5px;
   font-size: 16px;
-  display:flex
 }
 
-.submit-button {
-  background-color: #007bff;
+.car-form .image-preview {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.car-form img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.car-form .submit-button {
+  background-color: #007BFF;
   color: #fff;
+  font-size: 18px;
   padding: 10px 20px;
   border: none;
-  border-radius: 3px;
+  border-radius: 5px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-.submit-button:hover {
+.car-form .submit-button:hover {
   background-color: #0056b3;
 }
+

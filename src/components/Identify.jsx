@@ -78,10 +78,13 @@ const Identify = ({ onSearch }) => {
           <label>Price:</label>
           <input type="number" placeholder="$" name="price" value={formData.price} onChange={handleInputChange} />
         </div>
-        <div className="form-group">
-          <label>Images:</label>
-          <input type="file" name="image" accept="image/*" onChange={handleImageChange} multiple={true} />
-        </div>
+        
+        {!onSearch && (
+  <div className="form-group">
+    <label>Images:</label>
+    <input type="file" name="image" accept="image/*" onChange={handleImageChange} multiple={true} />
+  </div>
+)}
 
         {formData.images.length > 0 && !onSearch && (
           <div className="image-preview">
