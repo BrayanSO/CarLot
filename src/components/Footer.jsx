@@ -10,12 +10,12 @@ export default function App() {
 
       <div className='text-center p-3' style={{ backgroundColor: 'grey' }}>
         © 2023 Copyright:
-        <a className='text' href='https://github.com/BrayanSO/CarLot'>
+        <div className='text' href='https://github.com/BrayanSO/CarLot'>
           {/*More information*/}
           <Link to="/LoginForm">
-          <button  class="btn btn-link">Login</button>
+          <button  className="btn btn-link">Login</button>
           </Link>
-        </a>
+        </div>
       </div>
     </MDBFooter>
   );

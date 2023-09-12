@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import "../Styles/CarListSyle.css";
-import EditCarModal from "../pages/CarEditForm.jsx" // Importa tu componente de edición de automóviles
-
+import EditCarModal from "../pages/CarEditForm.jsx"; // Importa tu componente de edición de automóviles
+import { Carousel } from 'react-responsive-carousel';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 const CarList = () => {
   const [cars, setCars] = useState([]);
-  const [editIndex, setEditIndex] = useState(null); // Estado para rastrear el índice del automóvil en edición
+  const [editIndex, setEditIndex] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
+
   useEffect(() => {
     // Obtener la lista de autos desde el almacenamiento local
     const savedCars = JSON.parse(localStorage.getItem('cars')) || [];
@@ -14,31 +16,22 @@ const CarList = () => {
   }, []);
 
   const handleDeleteClick = (index) => {
-    // Elimina el formulario con el índice especificado
     const updatedCars = [...cars];
     updatedCars.splice(index, 1);
     setCars(updatedCars);
-
-    // Actualiza el almacenamiento local
     localStorage.setItem('cars', JSON.stringify(updatedCars));
   };
 
   const handleEditClick = (index) => {
-    // Establece el índice del automóvil en edición
     setEditIndex(index);
-    // Muestra el modal de edición
     setShowEditModal(true);
   };
-  
 
   const handleEditSave = (editedCar) => {
-    // Actualiza la lista de automóviles con los cambios realizados
     const updatedCars = [...cars];
     updatedCars[editIndex] = editedCar;
     setCars(updatedCars);
-    setEditIndex(null); // Sale del modo de edición
-
-    // Actualiza el almacenamiento local
+    setEditIndex(null);
     localStorage.setItem('cars', JSON.stringify(updatedCars));
   };
 
@@ -48,26 +41,32 @@ const CarList = () => {
       <ul>
         {cars.map((car, index) => (
           <div key={index} className="car-card">
-            <img src={car.image} alt={`${car.make} ${car.model}`} />
+            <Carousel autoPlay interval={3000} showThumbs={false}>
+              {car.images.map((image, imageIndex) => (
+                <div key={imageIndex}>
+                  <img src={image} alt={`${car.make} ${car.model}`} />
+                </div>
+              ))}
+            </Carousel>
             <div className="car-info">
               <p>
                 <strong>Marca:</strong> {car.make} <br />
                 <strong>Modelo:</strong> {car.model} <br />
                 <strong>Precio:</strong> ${car.price}
               </p>
-              <button onClick={() => handleDeleteClick(index)}>Eliminate</button>
-              <button onClick={() => handleEditClick(index)}>Edit</button>
+              <button onClick={() => handleDeleteClick(index)}>Eliminar</button>
+              <button onClick={() => handleEditClick(index)}>Editar</button>
             </div>
           </div>
         ))}
       </ul>
       {editIndex !== null && (
-  <EditCarModal
-    show={showEditModal}
-    onHide={() => setShowEditModal(false)}
-    car={cars[editIndex]}
-    onSave={handleEditSave}
-  />
+        <EditCarModal
+          show={showEditModal}
+          onHide={() => setShowEditModal(false)}
+          car={cars[editIndex]}
+          onSave={handleEditSave}
+        />
       )}
     </div>
   );

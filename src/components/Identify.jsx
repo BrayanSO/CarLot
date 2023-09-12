@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import "../Styles/CarFstyle.css";
 
 const Identify = ({ onSearch }) => {
-  const [formData, setFormData] = useState({ make: '', style: '', model: '', price: '', image: null });
+  const [formData, setFormData] = useState({ make: '', style: '', model: '', price: '', images: [] });
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -10,8 +10,9 @@ const Identify = ({ onSearch }) => {
   };
 
   const handleImageChange = (event) => {
-    const imageFile = event.target.files[0];
-    setFormData({ ...formData, image: URL.createObjectURL(imageFile) });
+    const imageFiles = event.target.files;
+    const imageUrls = Array.from(imageFiles).map((file) => URL.createObjectURL(file));
+    setFormData({ ...formData, images: [...formData.images, ...imageUrls] });
   };
 
   const handleSubmit = () => {
@@ -21,7 +22,7 @@ const Identify = ({ onSearch }) => {
       const savedCars = JSON.parse(localStorage.getItem('cars')) || [];
       savedCars.push(formData);
       localStorage.setItem('cars', JSON.stringify(savedCars));
-      setFormData({ make: '', style: '', model: '', price: '', image: null });
+      setFormData({ make: '', style: '', model: '', price: '', images: [] }); 
     }
   };
 
@@ -77,16 +78,16 @@ const Identify = ({ onSearch }) => {
           <label>Price:</label>
           <input type="number" placeholder="$" name="price" value={formData.price} onChange={handleInputChange} />
         </div>
-        {onSearch ? null : (
-          <div className="form-group">
-            <label>Image:</label>
-            <input type="file" name="image" accept="image/*" onChange={handleImageChange} />
-          </div>
-        )}
+        <div className="form-group">
+          <label>Images:</label>
+          <input type="file" name="image" accept="image/*" onChange={handleImageChange} multiple={true} />
+        </div>
 
-        {formData.image && !onSearch && (
+        {formData.images.length > 0 && !onSearch && (
           <div className="image-preview">
-            <img src={formData.image} alt="Preview" />
+            {formData.images.map((imageUrl, index) => (
+              <img key={index} src={imageUrl} alt={`Preview ${index}`} />
+            ))}
           </div>
         )}
 

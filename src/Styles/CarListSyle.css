@@ -1,7 +1,7 @@
 /* CarListStyle.css */
 
 .car-list-container {
-    max-width: 1000px;
+    max-width: 500px;
     margin: 0 auto;
     padding: 20px;
     background-color: #fffafa;
@@ -11,7 +11,7 @@
   .car-list-container h1 {
     font-size: 24px;
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 0px;
   }
   
   .car-card {
@@ -24,8 +24,8 @@
   }
   
   .car-card img {
-    width: 300px;
-    height: 200px;
+    width: 800px;
+    height: 300px;
   }
   
   .car-info p {

@@ -8,9 +8,9 @@ import "../Styles/Header.css"
 function Header() {
   return (
     <header>
-      <Navbar  className="nav-pills nav-stacked justify-content-center">
+      <Navbar  className="justify-content-center">
        
-            <Nav className="justify-content-center">
+            <Nav >
               <div className='logo'>
               <Nav.Link as={Link}to="/"><img src={CarLogo} alt="Logo"></img></Nav.Link>
               </div>
