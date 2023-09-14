@@ -38,7 +38,7 @@ const CarList = () => {
   return (
     <div className="car-list-container">
       <h1>Inventory</h1>
-      <ul>
+      <div className="car-card-container">
         {cars.map((car, index) => (
           <div key={index} className="car-card">
             <Carousel autoPlay interval={3000} showThumbs={false}>
@@ -59,7 +59,7 @@ const CarList = () => {
             </div>
           </div>
         ))}
-      </ul>
+      </div>
       {editIndex !== null && (
         <EditCarModal
           show={showEditModal}
