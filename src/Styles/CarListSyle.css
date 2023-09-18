@@ -1,7 +1,7 @@
 /* CarListStyle.css */
 
 .car-list-container {
-    max-width: 1200px;
+    max-width: 1100px;
     margin: 0 auto;
     padding: 20px;
     background-color: #fffafa;
@@ -23,13 +23,12 @@
     border-radius: 5px;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
      /* Estilos para cada tarjeta de automóvil (puedes personalizarlos según tus necesidades) */
-  width: calc(33.33% - 20px); /* Esto hace que haya 3 automóviles por fila con margen de 10px entre ellos */
   margin-bottom: 20px;
   /* Otros estilos para la tarjeta */
   }
   
   .car-card img {
-    height: 300px;
+    height: 200px;
   }
   
   .car-info p {
@@ -53,5 +52,5 @@
     display: flex;
     flex-wrap: wrap; /* Para que los automóviles se envuelvan a la siguiente línea si no caben en el ancho de la pantalla */
     justify-content: space-between; /* Espacio uniforme entre los automóviles */
-    margin-top: 20px; /* Espacio superior para separar de la cabecera */
+    margin-top: 10px; /* Espacio superior para separar de la cabecera */
   }

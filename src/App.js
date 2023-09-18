@@ -13,12 +13,22 @@ const handleSearch = (searchData) => {
 
 function App() {
   return (
-    <div>
-      <CarList />
-      <div className='filter'>
-      <Identify  onSearch={handleSearch} />
+    <div className="container">
+      <div className="row">
+        <div className="col-md-2 col-sm-12">
+          <div className='filter'>
+            <Identify onSearch={handleSearch} />
+          </div>
+        </div>
+        <div className="col-md-8 col-sm-12">
+          <CarList />
+        </div>
       </div>
-      <hr />
+      <div className="row">
+        <div className="col-md-10">
+          <hr />
+        </div>
+      </div>
     </div>
   );
 }
