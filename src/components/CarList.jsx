@@ -50,9 +50,14 @@ const CarList = () => {
             </Carousel>
             <div className="car-info">
               <p>
-                <strong>Marca:</strong> {car.make} <br />
-                <strong>Modelo:</strong> {car.model} <br />
-                <strong>Precio:</strong> ${car.price}
+                <strong>Make:</strong> {car.make} <br />
+                <strong>Model:</strong> {car.model} <br />
+                <strong>Price :</strong> ${car.price}<br/>
+                <strong>Style :</strong> {car.style}<br/>
+                <strong>Transmission :</strong> {car.transmission}<br/>
+                
+                
+                
               </p>
               <button onClick={() => handleDeleteClick(index)}>Eliminar</button>
               <button onClick={() => handleEditClick(index)}>Editar</button>

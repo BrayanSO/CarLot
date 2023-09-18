@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import "../Styles/CarFstyle.css";
 
 const Identify = ({ onSearch }) => {
-  const [formData, setFormData] = useState({ make: '', style: '', model: '', price: '', images: [] });
+  const [formData, setFormData] = useState({ make: '', style: '', model: '', transmission: '', price: '', images: [] });
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -22,7 +22,7 @@ const Identify = ({ onSearch }) => {
       const savedCars = JSON.parse(localStorage.getItem('cars')) || [];
       savedCars.push(formData);
       localStorage.setItem('cars', JSON.stringify(savedCars));
-      setFormData({ make: '', style: '', model: '', price: '', images: [] }); 
+      setFormData({ make: '', style: '', model: '', price: '', transmission:'', images: [] }); 
     }
   };
 
@@ -42,9 +42,22 @@ const Identify = ({ onSearch }) => {
         </div>
         <div className="form-group">
           <label>Style:</label>
-          <input type="text" name="style" value={formData.style} onChange={handleInputChange} />
+          <select  name="style" value={formData.style} onChange={handleInputChange} >
+          <option value="">Select Model</option>
+          <option value="Sedan">Sedan</option>
+          <option value="Hatchback">Hastback</option>
+          <option value="Suv">SUV</option>
+          </select>
         </div>
-
+        <div className="form-group">
+          <label>Transmission:</label>
+          <select  name="transmission" value={formData.transmission} onChange={handleInputChange}>
+          <option value="">Select Model</option>
+          <option value="Manual">Manual</option>
+          <option value="Automatic">Automatic</option>
+          <option value="CVT Automatic">CVT Automatic</option>
+          </select>
+        </div>
         <div className="form-group">
           <label>Model:</label>
           <select name="model" value={formData.model} onChange={handleInputChange}>
