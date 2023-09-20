@@ -3,16 +3,62 @@ import "../Styles/CarFstyle.css";
 
 const Identify = ({ onSearch }) => {
   const [formData, setFormData] = useState({ make: '', style: '', model: '', transmission: '', price: '', images: [] });
+  const [newMake, setNewMake] = useState(''); // Estado para la nueva marca
+  const [newModel, setNewModel] = useState(''); // Estado para el nuevo modelo
+  const [makes, setMakes] = useState(['Toyota', 'Ford', 'Honda']); // Estado para las marcas existentes
+  const [models, setModels] = useState([]); // Estado para los modelos existentes
+  const [showNewMakeField, setShowNewMakeField] = useState(false); // Estado para mostrar u ocultar el campo de nueva marca
+  const [showNewModelField, setShowNewModelField] = useState(false); // Estado para mostrar u ocultar el campo de nuevo modelo
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setFormData({ ...formData, [name]: value });
+    if (name === "make") {
+      if (value === "NuevaMarca") {
+        setShowNewMakeField(true); // Mostrar el campo de entrada de nueva marca
+        setShowNewModelField(false); // Ocultar el campo de entrada de nuevo modelo
+        setFormData({ ...formData, make: '' }); // Limpia la selección anterior
+        setNewMake(''); // Limpia el campo de entrada de nueva marca
+        setNewModel(''); // Limpia el campo de entrada de nuevo modelo
+      } else {
+        setShowNewMakeField(false); // Ocultar el campo de entrada de nueva marca
+        setShowNewModelField(false); // Ocultar el campo de entrada de nuevo modelo
+        setFormData({ ...formData, make: value });
+      }
+    } else if (name === "model") {
+      if (value === "NuevoModelo") {
+        setShowNewModelField(true); // Mostrar el campo de entrada de nuevo modelo
+        setFormData({ ...formData, model: '' }); // Limpia la selección anterior
+        setNewModel(''); // Limpia el campo de entrada de nuevo modelo
+      } else {
+        setShowNewModelField(false); // Ocultar el campo de entrada de nuevo modelo
+        setFormData({ ...formData, model: value });
+      }
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   const handleImageChange = (event) => {
     const imageFiles = event.target.files;
     const imageUrls = Array.from(imageFiles).map((file) => URL.createObjectURL(file));
     setFormData({ ...formData, images: [...formData.images, ...imageUrls] });
+  };
+
+  const handleNewMake = () => {
+    if (newMake) {
+      // Si hay una nueva marca, agrégala a las opciones de marca
+      setMakes([...makes, newMake]);
+      setFormData({ ...formData, make: newMake }); // Establece la nueva marca en el formulario
+      setNewMake(''); // Limpia el campo de entrada de nueva marca
+    }
+  };
+  const handleNewModel = () => {
+    if (newModel) {
+      // Si hay un nuevo modelo, agrégalo a las opciones de modelo
+      setModels([...models, newModel]);
+      setFormData({ ...formData, model: newModel }); // Establece el nuevo modelo en el formulario
+      setNewModel(''); // Limpia el campo de entrada de nuevo modelo
+    }
   };
 
   const handleSubmit = () => {
@@ -22,7 +68,7 @@ const Identify = ({ onSearch }) => {
       const savedCars = JSON.parse(localStorage.getItem('cars')) || [];
       savedCars.push(formData);
       localStorage.setItem('cars', JSON.stringify(savedCars));
-      setFormData({ make: '', style: '', model: '', price: '', transmission:'', images: [] }); 
+      setFormData({ make: '', style: '', model: '', price: '', transmission:'', images: [] });
     }
   };
 
@@ -34,16 +80,58 @@ const Identify = ({ onSearch }) => {
           <label>Make:</label>
           <select name="make" value={formData.make} onChange={handleInputChange}>
             <option value="">Select Make</option>
-            <option value="Toyota">Toyota</option>
-            <option value="Ford">Ford</option>
-            <option value="Honda">Honda</option>
-            {/* Agrega más opciones de marca según tus necesidades */}
+            {makes.map((makeOption) => (
+              <option key={makeOption} value={makeOption}>
+                {makeOption}
+              </option>
+            ))}
+            <option value="NuevaMarca">Nueva Marca</option> {/* Opción para agregar una nueva marca */}
           </select>
         </div>
+        {showNewMakeField && (
+          <div className="form-group">
+            <label>Nueva Marca:</label>
+            <input
+              type="text"
+              name="newMake"
+              value={newMake}
+              onChange={(event) => setNewMake(event.target.value)}
+            />
+            <button type="button" onClick={handleNewMake}>Agregar Nueva Marca</button>
+          </div>
+        )}
+
+<div className="form-group">
+          <label>Model:</label>
+          <select name="model" value={formData.model} onChange={handleInputChange}>
+            <option value="">Select Model</option>
+            {models.map((modelOption) => (
+              <option key={modelOption} value={modelOption}>
+                {modelOption}
+              </option>
+            ))}
+            <option value="NuevoModelo">Nuevo Modelo</option> {/* Opción para agregar un nuevo modelo */}
+          </select>
+        </div>
+
+        {showNewModelField && (
+          <div className="form-group">
+            <label>Nuevo Modelo:</label>
+            <input
+              type="text"
+              name="newModel"
+              value={newModel}
+              onChange={(event) => setNewModel(event.target.value)}
+            />
+            <button type="button" onClick={handleNewModel}>Agregar Nuevo Modelo</button>
+          </div>
+        )}
+
+
         <div className="form-group">
           <label>Style:</label>
           <select  name="style" value={formData.style} onChange={handleInputChange} >
-          <option value="">Select Model</option>
+          <option value="">Select Style</option>
           <option value="Sedan">Sedan</option>
           <option value="Hatchback">Hastback</option>
           <option value="Suv">SUV</option>
@@ -94,7 +182,7 @@ const Identify = ({ onSearch }) => {
         
         {!onSearch && (
   <div className="form-group">
-    <label>Images:</label>
+    <label>Photos:</label> <br/>
     <input type="file" name="image" accept="image/*" onChange={handleImageChange} multiple={true} />
   </div>
 )}
