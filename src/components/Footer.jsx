@@ -15,7 +15,7 @@ export default function App() {
           <Link to="/LoginForm">
           <button  className="btn btn-link">Login</button>
           </Link>
-        </div>
+        </div >
       </div>
     </MDBFooter>
   );

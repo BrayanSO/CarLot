@@ -3,7 +3,6 @@ import { createRoot } from 'react-dom/client'; // Importa createRoot desde 'reac
 
 import '../src/Styles/index.css'; // Si deseas agregar estilos globales
 import Layout from './Store/layout';
-
 const root = createRoot(document.getElementById('root'));
 
 root.render(

@@ -100,7 +100,6 @@ const Identify = ({ onSearch }) => {
             <button type="button" onClick={handleNewMake}>Agregar Nueva Marca</button>
           </div>
         )}
-
 <div className="form-group">
           <label>Model:</label>
           <select name="model" value={formData.model} onChange={handleInputChange}>
@@ -111,9 +110,30 @@ const Identify = ({ onSearch }) => {
               </option>
             ))}
             <option value="NuevoModelo">Nuevo Modelo</option> {/* Opción para agregar un nuevo modelo */}
+            {/* Agrega opciones de modelo según la marca seleccionada */}
+            {formData.make === 'Toyota' && (
+              <>
+                <option value="Camry">Camry</option>
+                <option value="Corolla">Corolla</option>
+                {/* Agrega más modelos de Toyota según tus necesidades */}
+              </>
+            )}
+            {formData.make === 'Ford' && (
+              <>
+                <option value="F-150">F-150</option>
+                <option value="Escape">Escape</option>
+                {/* Agrega más modelos de Ford según tus necesidades */}
+              </>
+            )}
+            {formData.make === 'Honda' && (
+              <>
+                <option value="Civic">Civic</option>
+                <option value="Accord">Accord</option>
+                {/* Agrega más modelos de Honda según tus necesidades */}
+              </>
+            )}
           </select>
         </div>
-
         {showNewModelField && (
           <div className="form-group">
             <label>Nuevo Modelo:</label>
@@ -146,34 +166,7 @@ const Identify = ({ onSearch }) => {
           <option value="CVT Automatic">CVT Automatic</option>
           </select>
         </div>
-        <div className="form-group">
-          <label>Model:</label>
-          <select name="model" value={formData.model} onChange={handleInputChange}>
-            <option value="">Select Model</option>
-            {/* Agrega opciones de modelo según la marca seleccionada */}
-            {formData.make === 'Toyota' && (
-              <>
-                <option value="Camry">Camry</option>
-                <option value="Corolla">Corolla</option>
-                {/* Agrega más modelos de Toyota según tus necesidades */}
-              </>
-            )}
-            {formData.make === 'Ford' && (
-              <>
-                <option value="F-150">F-150</option>
-                <option value="Escape">Escape</option>
-                {/* Agrega más modelos de Ford según tus necesidades */}
-              </>
-            )}
-            {formData.make === 'Honda' && (
-              <>
-                <option value="Civic">Civic</option>
-                <option value="Accord">Accord</option>
-                {/* Agrega más modelos de Honda según tus necesidades */}
-              </>
-            )}
-          </select>
-        </div>
+        
 
         <div className="form-group">
           <label>Price:</label>

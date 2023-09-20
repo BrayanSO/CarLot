@@ -3,6 +3,8 @@ import 'bootstrap/dist/css/bootstrap.min.css'; // Importa los estilos CSS de Boo
 import CarList from "./components/CarList.jsx";
 import Identify from './components/Identify.jsx';
 import  "./Styles/App.css"
+
+
 const handleSearch = (searchData) => {
   // Aquí debes implementar la lógica para buscar autos con los datos de búsqueda (searchData)
   // Puedes mostrar los resultados de la búsqueda en otro componente o realizar cualquier acción necesaria.
@@ -15,6 +17,7 @@ function App() {
   return (
     <div className="container">
       <div className="row">
+        
         <div className="col-md-2 col-sm-12">
           <div className='filter'>
             <Identify onSearch={handleSearch} />
@@ -28,9 +31,11 @@ function App() {
         <div className="col-md-10">
           <hr />
         </div>
+        
       </div>
     </div>
   );
 }
+
 
 export default App;
