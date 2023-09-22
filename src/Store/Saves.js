@@ -1,14 +1,26 @@
- import { collection, addDoc } from "firebase/firestore"; 
-console.log("VAMOOOS SAVE");
-try {
-  const docRef = await addDoc(collection(db, "users"), {
-    first: "Ada",
-    last: "Lovelace",
-  });
-  console.log("Document written with ID: ", docRef.id);
-} catch (e) {
-  console.error("Error adding document: ", e); 
-}
+import React, { useEffect, useState } from 'react';
+import db from './firebase.js';
 
+const MiComponente = () => {
+  const [data, setData] = useState([]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await db.collection('users').get();
+      const data = response.docs.map((doc) => doc.data());
+      setData(data);
+    };
 
+    fetchData();
+  }, []);
+
+  return (
+    <div>
+      {data.map((item) => (
+        <p key={item.id}>{item.nombre}</p>
+      ))}
+    </div>
+  );
+};
+
+export default MiComponente;
