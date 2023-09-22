@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import "../Styles/CarFstyle.css";
+import db from '../Store/firebase';
 
 const Identify = ({ onSearch }) => {
   const [formData, setFormData] = useState({ make: '', style: '', model: '', transmission: '', price: '', images: [] });
@@ -65,10 +66,18 @@ const Identify = ({ onSearch }) => {
     if (onSearch) {
       onSearch(formData);
     } else {
-      const savedCars = JSON.parse(localStorage.getItem('cars')) || [];
-      savedCars.push(formData);
-      localStorage.setItem('cars', JSON.stringify(savedCars));
-      setFormData({ make: '', style: '', model: '', price: '', transmission:'', images: [] });
+      // Si es una publicación de anuncio, puedes agregar datos a Firestore.
+      // Suponiendo que tienes una colección "cars" en Firestore.
+      db.collection('cars')
+        .add(formData)
+        .then(() => {
+          console.log('Datos del automóvil agregados a Firestore correctamente.');
+          // Limpia el formulario u realiza otras acciones después de enviar los datos con éxito.
+          setFormData({ make: '', style: '', model: '', price: '', transmission: '', images: [] });
+        })
+        .catch((error) => {
+          console.error('Error al agregar datos del automóvil a Firestore:', error);
+        });
     }
   };
 
