@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import db from './firebase.js';
 
+
 const MiComponente = () => {
   const [data, setData] = useState([]);
 

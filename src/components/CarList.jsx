@@ -1,38 +1,47 @@
 import React, { useState, useEffect } from 'react';
 import "../Styles/CarListSyle.css";
-import EditCarModal from "../pages/CarEditForm.jsx"; // Importa tu componente de edición de automóviles
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import firebase from 'firebase/compat/app';
+
 
 const CarList = () => {
   const [cars, setCars] = useState([]);
-  const [editIndex, setEditIndex] = useState(null);
-  const [showEditModal, setShowEditModal] = useState(false);
 
   useEffect(() => {
-    // Obtener la lista de autos desde el almacenamiento local
-    const savedCars = JSON.parse(localStorage.getItem('cars')) || [];
-    setCars(savedCars);
+    // Obtener la lista de autos desde Firebase Firestore
+    const db = firebase.firestore();
+    const carCollection = db.collection('cars');
+
+    const fetchData = async () => {
+      try {
+        const querySnapshot = await carCollection.get();
+        const carsData = [];
+        
+        querySnapshot.forEach((doc) => {
+          carsData.push({ id: doc.id, ...doc.data() });
+        });
+        setCars(carsData);
+      } catch (error) {
+        console.error('Error al obtener datos de automóviles desde Firestore:', error);
+      }
+    };
+
+    fetchData();
   }, []);
 
-  const handleDeleteClick = (index) => {
-    const updatedCars = [...cars];
-    updatedCars.splice(index, 1);
-    setCars(updatedCars);
-    localStorage.setItem('cars', JSON.stringify(updatedCars));
-  };
-
-  const handleEditClick = (index) => {
-    setEditIndex(index);
-    setShowEditModal(true);
-  };
-
-  const handleEditSave = (editedCar) => {
-    const updatedCars = [...cars];
-    updatedCars[editIndex] = editedCar;
-    setCars(updatedCars);
-    setEditIndex(null);
-    localStorage.setItem('cars', JSON.stringify(updatedCars));
+  const handleDeleteClick = async (index) => {
+    try {
+      const carToDelete = cars[index];
+      const db = firebase.firestore();
+      const carCollection = db.collection('cars');
+      await carCollection.doc(carToDelete.id).delete(); // Elimina el documento en Firestore
+      const updatedCars = [...cars];
+      updatedCars.splice(index, 1); // Elimina el elemento del estado local
+      setCars(updatedCars);
+    } catch (error) {
+      console.error('Error al eliminar el automóvil:', error);
+    }
   };
 
   return (
@@ -55,26 +64,15 @@ const CarList = () => {
                 <strong>Price :</strong> ${car.price}<br/>
                 <strong>Style :</strong> {car.style}<br/>
                 <strong>Transmission :</strong> {car.transmission}<br/>
-                
-                
-                
               </p>
               <button onClick={() => handleDeleteClick(index)}>Eliminar</button>
-              <button onClick={() => handleEditClick(index)}>Editar</button>
             </div>
           </div>
         ))}
       </div>
-      {editIndex !== null && (
-        <EditCarModal
-          show={showEditModal}
-          onHide={() => setShowEditModal(false)}
-          car={cars[editIndex]}
-          onSave={handleEditSave}
-        />
-      )}
     </div>
   );
 };
 
 export default CarList;
+
