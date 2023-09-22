@@ -61,15 +61,28 @@ const Identify = ({ onSearch }) => {
     }
   };
 
-  const handleSubmit = () => {
-    if (onSearch) {
-      onSearch(formData);
-    } else {
-      const savedCars = JSON.parse(localStorage.getItem('cars')) || [];
-      savedCars.push(formData);
-      localStorage.setItem('cars', JSON.stringify(savedCars));
-      setFormData({ make: '', style: '', model: '', price: '', transmission:'', images: [] });
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    
+    // Verificar si se ha seleccionado una marca existente
+    if (formData.make !== '') {
+      // Agregar el nuevo modelo a la marca existente
+      const updatedMakes = makes.map((make) => {
+        if (make === formData.make) {
+          return {
+            ...make,
+            models: [...make.models, newModel]
+          };
+        }
+        return make;
+      });
+      setMakes(updatedMakes);
     }
+    
+    // Limpiar los campos del formulario
+    setFormData({ make: '', style: '', model: '', transmission: '', price: '', images: [] });
+    setNewMake('');
+    setNewModel('');
   };
 
   return (
