@@ -9,7 +9,7 @@ const Register = () => {
     e.preventDefault();
 
     // Guardar los datos en Firestore
-    db.collection('').add({
+    db.collection('users').add({
       nombre: nombre,
       correo: correo,
     })
