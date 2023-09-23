@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import "../Styles/CarFstyle.css";
 import db from '../Store/firebase';
+import firebase from 'firebase/compat/app';
+var storage = firebase.app().storage("gs://my-custom-bucket");
 
 const Identify = ({ onSearch }) => {
   const [formData, setFormData] = useState({ make: '', style: '', model: '', transmission: '', price: '', images: [] });
@@ -78,6 +80,27 @@ const Identify = ({ onSearch }) => {
         .catch((error) => {
           console.error('Error al agregar datos del automóvil a Firestore:', error);
         });
+        // Obtiene la referencia al Storage de Firebase
+const storageRef = storage.ref();
+
+// Itera sobre las imágenes y las carga al Storage
+formData.images.forEach((image) => {
+  // Genera un nombre único para cada imagen
+  const imageName = `${Date.now()}_${image.name}`;
+
+  // Crea una referencia para la imagen en el Storage
+  const imageRef = storageRef.child(imageName);
+
+  // Sube la imagen al Storage
+  imageRef.put(image)
+    .then((snapshot) => {
+      console.log('Imagen cargada al Storage de Firebase correctamente.');
+      // Aquí puedes realizar cualquier acción adicional después de cargar la imagen
+    })
+    .catch((error) => {
+      console.error('Error al cargar la imagen al Storage de Firebase:', error);
+    });
+});
     }
   };
 
