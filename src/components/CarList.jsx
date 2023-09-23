@@ -12,6 +12,7 @@ const CarList = () => {
     // Obtener la lista de autos desde Firebase Firestore
     const db = firebase.firestore();
     const carCollection = db.collection('cars');
+    
 
     const fetchData = async () => {
       try {

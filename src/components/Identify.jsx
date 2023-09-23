@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import "../Styles/CarFstyle.css";
 import db from '../Store/firebase';
 import firebase from 'firebase/compat/app';
-var storage = firebase.app().storage("gs://my-custom-bucket");
+var storage = firebase.app().storage("gs://autos-c1792.appspot.com");
 
 const Identify = ({ onSearch }) => {
   const [formData, setFormData] = useState({ make: '', style: '', model: '', transmission: '', price: '', images: [] });
