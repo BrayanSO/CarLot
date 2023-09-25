@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import firebase from 'firebase/compat/app'; // Importa firebase
+import "firebase/compat/auth";
 import 'firebase/compat/firestore';
 import db from '../Store/firebase'
 
