@@ -36,7 +36,17 @@ const CarList = () => {
       const carToDelete = cars[index];
       const db = firebase.firestore();
       const carCollection = db.collection('cars');
-      await carCollection.doc(carToDelete.id).delete(); // Elimina el documento en Firestore
+  
+      // Eliminar las imágenes del almacenamiento
+      for (const image of carToDelete.images) {
+        const imageName = image.id;
+        const storageRef = firebase.storage().ref().child(imageName);
+        await storageRef.delete();
+      }
+  
+      // Eliminar la entrada en Firestore
+      await carCollection.doc(carToDelete.id).delete();
+  
       const updatedCars = [...cars];
       updatedCars.splice(index, 1); // Elimina el elemento del estado local
       setCars(updatedCars);
@@ -44,6 +54,7 @@ const CarList = () => {
       console.error('Error al eliminar el automóvil:', error);
     }
   };
+  
 
   return (
     <div className="car-list-container">
@@ -52,11 +63,12 @@ const CarList = () => {
         {cars.map((car, index) => (
           <div key={index} className="car-card">
             <Carousel autoPlay interval={3000} showThumbs={false}>
-              {car.images.map((image, imageIndex) => (
-                <div key={imageIndex}>
-                  <img src={image} alt={`${car.make} ${car.model}`} />
-                </div>
-              ))}
+            {car.images.map((image, imageIndex) => (
+  <div key={image.id}> {/* Utiliza el ID de la imagen como clave */}
+    <img src={image.url} alt={`${car.make} ${car.model}`} />
+  </div>
+))}
+
             </Carousel>
             <div className="car-info">
               <p>
