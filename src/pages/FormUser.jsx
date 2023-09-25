@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
-import db from '../Store/firebase.js';
+import firebase from 'firebase/compat/app'; // Importa firebase
+import 'firebase/compat/firestore';
+import db from '../Store/firebase'
+
 
 const Register = () => {
   const [nombre, setNombre] = useState('');
@@ -9,20 +12,29 @@ const Register = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Guardar los datos en Firestore
-    db.collection('users').add({
-      nombre: nombre,
-      correo: correo,
-      password: password,
-    })
-      .then(() => {
-        // Limpiar los campos del formulario
-        setNombre('');
-        setCorreo('');
-        setPassword('');
+    // Crear un nuevo usuario en Firebase Authentication
+    firebase.auth().createUserWithEmailAndPassword(correo, password)
+      .then((userCredential) => {
+        // Usuario registrado con éxito
+        var user = userCredential.user;
+        // Guardar los datos del usuario en Firestore
+        db.collection('users').add({
+          nombre: nombre,
+          correo: correo,
+          userId: user.uid, // Asociar el ID del usuario autenticado
+        })
+          .then(() => {
+            // Limpiar los campos del formulario
+            setNombre('');
+            setCorreo('');
+            setPassword('');
+          })
+          .catch((error) => {
+            console.error('Error al guardar los datos en Firestore:', error);
+          });
       })
       .catch((error) => {
-        console.error('Error al enviar el formulario:', error);
+        console.error('Error al crear el usuario en Firebase:', error);
       });
   };
 
@@ -42,7 +54,7 @@ const Register = () => {
       />
       <input
         type="password"
-        placeholder="password"
+        placeholder="Contraseña"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
@@ -50,4 +62,5 @@ const Register = () => {
     </form>
   );
 };
+
 export default Register;

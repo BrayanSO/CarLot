@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import "../Styles/LoginStyle.css"
+import firebase from 'firebase/compat/app'; // Importa firebase
+import 'firebase/compat/auth'; // Importa la autenticación de Firebase
+import '../Styles/LoginStyle.css';
 
 const LoginForm = () => {
   const [loginData, setLoginData] = useState({
@@ -9,36 +10,29 @@ const LoginForm = () => {
     contraseña: '',
   });
 
+
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setLoginData({ ...loginData, [name]: value });
   };
 
-  const handleSubmit = (event) => {
+  
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    
-    // Obtiene los datos de usuario almacenados en localStorage
-    const storedUser = localStorage.getItem('user');
-    
-    // Verifica si los datos de inicio de sesión coinciden con los datos almacenados
-    if (storedUser) {
-      const storedUserData = JSON.parse(storedUser);
-      if (loginData.email === storedUserData.email && loginData.contraseña === storedUserData.contraseña) {
-        // El inicio de sesión es exitoso
+  
+    const { email, contraseña } = loginData;
+  
+    try {
+      // Iniciar sesión con Firebase Authentication
+      await firebase.auth().signInWithEmailAndPassword(email, contraseña);
+  
+        // Si el inicio de sesión tiene éxito, redirige al usuario a la página deseada
         console.log('Inicio de sesión exitoso');
-        return; // Sale de la función para evitar la ejecución posterior
-      } else {
-        // Datos de inicio de sesión incorrectos
-        console.log('Datos de inicio de sesión incorrectos');
+        window.location.href = '/Identify'; // Cambia '/dashboard' por la URL de la página a la que deseas redirigir al usuario
+      } catch (error) {
+        console.error('Error al iniciar sesión:', error.message);
       }
-    } else {
-      // No se encontraron datos de usuario
-      console.log('Usuario no registrado');
-    }
-    
-    // Aquí puedes agregar la lógica para enviar los datos de inicio de sesión al servidor y autenticar al usuario
-    console.log('Datos de inicio de sesión:', loginData);
-  };
+    };
   
 
   return (
@@ -55,7 +49,7 @@ const LoginForm = () => {
             required
           />
         </Form.Group>
-  
+
         <Form.Group controlId="contraseña">
           <Form.Label>Password</Form.Label>
           <Form.Control
@@ -66,18 +60,16 @@ const LoginForm = () => {
             required
           />
         </Form.Group>
-  
+
         <div className="button-container">
-          <Link to="/Identify">
-            <Button variant="primary" type="submit">
-              Iniciar Sesión
-            </Button>
-          </Link>
+          <Button variant="primary" type="submit">
+            Iniciar Sesión
+          </Button>
         </div>
       </Form>
     </div>
   );
-  
 };
 
 export default LoginForm;
+
