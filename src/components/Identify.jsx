@@ -3,6 +3,17 @@ import "../Styles/CarFstyle.css";
 import db from '../Store/firebase';
 import firebase from 'firebase/compat/app';
 
+const auth = firebase.auth();
+auth.onAuthStateChanged(user => {
+  if (user) {
+    // El usuario está autenticado, permite el acceso a la página restringida.
+  } else {
+    // El usuario no está autenticado, redirige a la página de inicio de sesión.
+    window.location.href = '/'; // Reemplaza con la ruta de tu página de inicio de sesión.
+  }
+});
+
+
 const Identify = ({ onSearch }) => {
   const [formData, setFormData] = useState({ make: '', style: '', model: '', transmission: '', price: '', images: [] });
   const [newMake, setNewMake] = useState('');
