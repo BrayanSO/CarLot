@@ -3,7 +3,6 @@ import "../Styles/CarFstyle.css";
 import db from '../Store/firebase';
 import firebase from 'firebase/compat/app';
 
-
 const Identify = ({ onSearch }) => {
   const [formData, setFormData] = useState({ make: '', style: '', model: '', transmission: '', price: '', images: [] });
   const [newMake, setNewMake] = useState('');
@@ -44,77 +43,53 @@ const Identify = ({ onSearch }) => {
   const handleImageChange = async (event) => {
     const imageFiles = event.target.files;
     const imageUrls = [];
-  
+
     const storageRef = firebase.storage().ref();
-  
+
     for (const file of imageFiles) {
-      const imageName = `${Date.now()}_${file.name}`; // Generar un nombre único
-  
+      const imageName = `${Date.now()}_${file.name}`;
+
       const imageRef = storageRef.child(imageName);
-  
+
       try {
         await imageRef.put(file);
         const imageUrl = await imageRef.getDownloadURL();
-        imageUrls.push({ id: imageName, url: imageUrl }); // Agregar el ID y la URL
+        imageUrls.push({ id: imageName, url: imageUrl });
       } catch (error) {
         console.error('Error al cargar la imagen al Storage de Firebase:', error);
       }
     }
-  
+
     setFormData({ ...formData, images: [...formData.images, ...imageUrls] });
   };
-  
-  const handleNewMake = () => {
+
+
+  const handleNewMake = async () => {
     if (newMake) {
+      const makeRef = await db.collection('marcas').add({ name: newMake });
       setMakes([...makes, newMake]);
-      setFormData({ ...formData, make: newMake });
+      setFormData({ ...formData, make: makeRef.id });
       setNewMake('');
     }
   };
 
-  const handleNewModel = () => {
+  const handleNewModel = async () => {
     if (newModel) {
+      const modelRef = await db.collection('modelos').add({ name: newModel });
       setModels([...models, newModel]);
-      setFormData({ ...formData, model: newModel });
+      setFormData({ ...formData, model: modelRef.id });
       setNewModel('');
     }
   };
-  const deleteImages = async (imageUrls) => {
-    const storageRef = firebase.storage().ref();
-    for (const imageUrl of imageUrls) {
-      // Verificar que imageUrl sea una cadena válida
-      if (typeof imageUrl === 'string') {
-        // Extraer el nombre del archivo de la URL de la imagen
-        const imageName = imageUrl.split('/').pop();
-  
-        // Eliminar la imagen de Firebase Storage
-        const imageRef = storageRef.child(imageName);
-        try {
-          await imageRef.delete();
-          console.log(`Imagen ${imageName} eliminada con éxito.`);
-        } catch (error) {
-          console.error(`Error al eliminar la imagen ${imageName}:`, error);
-        }
-      }
-    }
-  };
-  
+
   const handleSubmit = () => {
     if (onSearch) {
       onSearch(formData);
     } else {
       db.collection('cars')
         .add(formData)
-        .then(async (docRef) => {
+        .then(() => {
           console.log('Datos del automóvil agregados a Firestore correctamente.');
-          
-          // Eliminar imágenes si se elimina la publicación
-          docRef.onSnapshot((doc) => {
-            if (!doc.exists) {
-              deleteImages(formData.images);
-            }
-          });
-          
           setFormData({ make: '', style: '', model: '', price: '', transmission: '', images: [] });
         })
         .catch((error) => {
