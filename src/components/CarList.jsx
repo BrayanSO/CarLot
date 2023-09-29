@@ -3,6 +3,7 @@ import "../Styles/CarListSyle.css";
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import firebase from 'firebase/compat/app';
+import Canvas from './OffCanvas';
 
 
 const CarList = () => {
@@ -58,7 +59,7 @@ const CarList = () => {
 
   return (
     <div className="car-list-container">
-      <h1>Inventory</h1>
+        <Canvas/> 
       <div className="car-card-container">
         {cars.map((car, index) => (
           <div key={index} className="car-card">

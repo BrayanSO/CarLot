@@ -1,0 +1,26 @@
+.button { background-color: transparent;
+    color: black;
+   border: 0;
+   font-size: 30px;
+   box-shadow: none;
+
+}   
+
+.icono {
+    text-align: center;
+}
+
+.style {
+    background-color:transparent;
+    border-radius: 50px;
+    margin-bottom: 5px;
+}
+.style2 {
+    background-color: transparent;
+    border-radius: 50px;
+}
+
+.closebutton {
+   justify-content: center;
+   font-size: 30px;
+}
