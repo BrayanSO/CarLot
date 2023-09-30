@@ -14,8 +14,7 @@ function Canvas() {
   const offcanvasStyle = {
     width: "355px", // Define el ancho deseado
     height: "740px", // Define la altura deseada
-    position: "absolute",
-    left: "40%",
+  
     
     
   };
@@ -36,7 +35,7 @@ const handleSearch = (searchData) => {
       <Offcanvas className="style2" show={show} onHide={handleClose} placement="top" style={offcanvasStyle}>
         <Offcanvas.Header className='closebutton' closeButton>
         </Offcanvas.Header>
-        <Offcanvas.Body className="style d-flex align-items-center justify-content-center">
+        <Offcanvas.Body className="style">
           <Identify onSearch={handleSearch} />
         </Offcanvas.Body>
       </Offcanvas>

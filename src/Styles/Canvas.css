@@ -14,10 +14,14 @@
     background-color:transparent;
     border-radius: 50px;
     margin-bottom: 5px;
+    justify-content: center;
 }
 .style2 {
     background-color: transparent;
     border-radius: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .closebutton {
