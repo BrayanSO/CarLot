@@ -12,11 +12,9 @@ function Canvas() {
   const handleShow = () => setShow(true);
 
   const offcanvasStyle = {
-    width: "355px", // Define el ancho deseado
+    
     height: "740px", // Define la altura deseada
   
-    
-    
   };
   
 const handleSearch = (searchData) => {
@@ -36,7 +34,7 @@ const handleSearch = (searchData) => {
         <Offcanvas.Header className='closebutton' closeButton>
         </Offcanvas.Header>
         <Offcanvas.Body className="style">
-          <Identify onSearch={handleSearch} />
+          <Identify className="style3" onSearch={handleSearch} />
         </Offcanvas.Body>
       </Offcanvas>
     </div>
