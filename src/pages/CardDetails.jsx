@@ -3,8 +3,6 @@ import "../Styles/CarListSyle.css";
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import firebase from 'firebase/compat/app';
-import Canvas from './OffCanvas';
-import { Link } from 'react-router-dom';
 
 
 
@@ -61,7 +59,6 @@ const CarList = () => {
 
   return (
     <div className="car-list-container">
-        <Canvas/> 
       <div className="car-card-container">
         {cars.map((car, index) => (
           <div key={index} className="car-card">
@@ -81,9 +78,6 @@ const CarList = () => {
                 <strong>Style :</strong> {car.style}<br/>
                 <strong>Transmission :</strong> {car.transmission}<br/>
               </p>
-              <Link to="/CardDetails">
-              <button>Details</button>
-              </Link>
               {isLoggedIn && (
                 <button onClick={() => handleDeleteClick(index)}>Eliminar</button>
               )}
