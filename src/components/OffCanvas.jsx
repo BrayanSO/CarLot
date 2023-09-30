@@ -12,7 +12,6 @@ function Canvas() {
   const handleShow = () => setShow(true);
 
   const offcanvasStyle = {
-    
     height: "740px", // Define la altura deseada
   
   };

@@ -6,6 +6,7 @@ import firebase from 'firebase/compat/app';
 import Canvas from './OffCanvas';
 
 
+
 const CarList = () => {
   const [cars, setCars] = useState([]);
 
@@ -55,7 +56,7 @@ const CarList = () => {
       console.error('Error al eliminar el automóvil:', error);
     }
   };
-  
+  const isLoggedIn = firebase.auth().currentUser !== null;
 
   return (
     <div className="car-list-container">
@@ -79,7 +80,9 @@ const CarList = () => {
                 <strong>Style :</strong> {car.style}<br/>
                 <strong>Transmission :</strong> {car.transmission}<br/>
               </p>
-              <button onClick={() => handleDeleteClick(index)}>Eliminar</button>
+              {isLoggedIn && (
+                <button onClick={() => handleDeleteClick(index)}>Eliminar</button>
+              )}
             </div>
           </div>
         ))}

@@ -3,4 +3,6 @@ img {
     height: 100px;
     align-items: center !important;
     margin-bottom: 10px;
+    
 }
+nav { background-color:rgba(190,190,190,255);}
