@@ -12,7 +12,7 @@ function Header() {
        
             <Nav >
               <div className='logo'>
-              <Nav.Link as={Link}to="/"><img src={CarLogo} alt="Logo"></img></Nav.Link>
+              <Nav.Link as={Link}to="/"><img src={CarLogo} alt="Logo" className='logo2'></img></Nav.Link>
               </div>
               {/* Usa el componente Link para redireccionar a Register */}
               <div className='login'>

@@ -6,7 +6,10 @@ import LoginForm from "../components/Login";
 import Header from "../components/Header"
 import Footer from "../components/Footer"
 import Identify from "../components/Identify";
-import CardDetails from "../pages/CardDetails"
+import CarDetails from "../pages/CarDetails";
+import CarList from "../components/CarList";
+
+
 //create your first component
 const Layout = () => {
   //the basename is used when your project is published in a subdirectory and not in the root of the domain
@@ -22,7 +25,8 @@ const Layout = () => {
             <Route element={<FormUser />} path="/Register" />
             <Route element={<LoginForm/>} path="/LoginForm"/>
             <Route element={<Identify/>} path="/Identify"/>
-            <Route element={<CardDetails/>} path="/CardDetails/"></Route>
+            <Route element={<CarList />} path="/" />
+            <Route element={<CarDetails/>} path="/CarDetails/:id"/>
           </Routes>
           <Footer/>
       

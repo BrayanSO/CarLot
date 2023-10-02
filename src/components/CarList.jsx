@@ -81,7 +81,7 @@ const CarList = () => {
                 <strong>Style :</strong> {car.style}<br/>
                 <strong>Transmission :</strong> {car.transmission}<br/>
               </p>
-              <Link to="/CardDetails">
+              <Link to={`/CarDetails/${car.id}`}>
               <button>Details</button>
               </Link>
               {isLoggedIn && (
