@@ -4,7 +4,7 @@ import db from '../Store/firebase';
 import firebase from 'firebase/compat/app';
 
 const Identify = ({ onSearch }) => {
-  const [formData, setFormData] = useState({ make: '', style: '', model: '', transmission: '', price: '', fuel:'',  images: [] });
+  const [formData, setFormData] = useState({ make: '', style: '', model: '', transmission: '', price: '', fuel:'' , kilometres:'', doors:'',  images: [] });
   const [newMake, setNewMake] = useState('');
   const [newModel, setNewModel] = useState('');
   const [makes, setMakes] = useState(['Toyota', 'Ford', 'Honda']);
@@ -90,7 +90,7 @@ const Identify = ({ onSearch }) => {
         .add(formData)
         .then(() => {
           console.log('Datos del automóvil agregados a Firestore correctamente.');
-          setFormData({ make: '', style: '', model: '', price: '', transmission: '', fuel:'', images: [] });
+          setFormData({ make: '', style: '', model: '', price: '', transmission: '', fuel:'', doors:'', kilometres:'', images: [] });
         })
         .catch((error) => {
           console.error('Error al agregar datos del automóvil a Firestore:', error);
@@ -111,7 +111,7 @@ const Identify = ({ onSearch }) => {
                 {makeOption}
               </option>
             ))}
-            <option value="NuevaMarca">Nueva Marca</option>
+          {onSearch ? null:  <option value="NuevaMarca">Nueva Marca</option>}
           </select>
         </div>
         {showNewMakeField && (
@@ -135,7 +135,7 @@ const Identify = ({ onSearch }) => {
                 {modelOption}
               </option>
             ))}
-            <option value="NuevoModelo">Nuevo Modelo</option>
+            {!onSearch && <option value="NuevoModelo">Nuevo Modelo</option> }
             {formData.make === 'Toyota' && (
               <>
                 <option value="Camry">Camry</option>
@@ -191,8 +191,25 @@ const Identify = ({ onSearch }) => {
           <input type="number" placeholder="$" name="price" value={formData.price} onChange={handleInputChange} />
         </div>
         <div className="form-group">
-          <label>Fuel:</label>
-          <input  placeholder="" name="fuel" value={formData.fuel} onChange={handleInputChange} />
+          <label>Fuel: </label>
+          <select name="fuel" value={formData.fuel} onChange={handleInputChange}>
+            <option value="">Select fuel</option>
+            <option value="Manual">Gasoline</option>
+            <option value="Automatic">Diesel</option>
+            <option value="CVT Automatic">hybrid</option>
+          </select>
+        </div>
+        <div className="form-group">
+          <label>Puertas: </label> 
+          <select name="doors" value={formData.doors} onChange={handleInputChange}>
+            <option value=""># doors</option>
+            <option value="Manual">2 - 3 </option>
+            <option value="Automatic">4 or more</option>
+          </select>
+          <div className="form-group">
+          <label>kilometres:</label>
+          <input type="number" placeholder="" name="kilometres" value={formData.kilometres} onChange={handleInputChange} />
+        </div>
         </div>
         {!onSearch && (
           <div className="form-group">

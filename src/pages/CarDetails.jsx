@@ -52,6 +52,11 @@ const CarDetails = () => {
                   <strong>Style:</strong> {car.style} <br />
                   <strong>Transmission:</strong> {car.transmission} <br />
                   <strong>Fuel:</strong> {car.fuel} <br/>
+                  <strong>Doors:</strong> {car.doors} <br/>
+                  <strong>Kilometres:</strong> {car.kilometres} <br/>
+
+                  
+                  
                 </p>
               </div>
             </div>
