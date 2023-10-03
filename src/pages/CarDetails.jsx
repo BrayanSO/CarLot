@@ -51,6 +51,7 @@ const CarDetails = () => {
                   <strong>Price:</strong> ${car.price} <br />
                   <strong>Style:</strong> {car.style} <br />
                   <strong>Transmission:</strong> {car.transmission} <br />
+                  <strong>Fuel:</strong> {car.fuel} <br/>
                 </p>
               </div>
             </div>

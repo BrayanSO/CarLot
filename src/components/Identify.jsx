@@ -4,7 +4,7 @@ import db from '../Store/firebase';
 import firebase from 'firebase/compat/app';
 
 const Identify = ({ onSearch }) => {
-  const [formData, setFormData] = useState({ make: '', style: '', model: '', transmission: '', price: '', images: [] });
+  const [formData, setFormData] = useState({ make: '', style: '', model: '', transmission: '', price: '', fuel:'',  images: [] });
   const [newMake, setNewMake] = useState('');
   const [newModel, setNewModel] = useState('');
   const [makes, setMakes] = useState(['Toyota', 'Ford', 'Honda']);
@@ -90,7 +90,7 @@ const Identify = ({ onSearch }) => {
         .add(formData)
         .then(() => {
           console.log('Datos del automóvil agregados a Firestore correctamente.');
-          setFormData({ make: '', style: '', model: '', price: '', transmission: '', images: [] });
+          setFormData({ make: '', style: '', model: '', price: '', transmission: '', fuel:'', images: [] });
         })
         .catch((error) => {
           console.error('Error al agregar datos del automóvil a Firestore:', error);
@@ -189,6 +189,10 @@ const Identify = ({ onSearch }) => {
         <div className="form-group">
           <label>Price:</label>
           <input type="number" placeholder="$" name="price" value={formData.price} onChange={handleInputChange} />
+        </div>
+        <div className="form-group">
+          <label>Fuel:</label>
+          <input  placeholder="" name="fuel" value={formData.fuel} onChange={handleInputChange} />
         </div>
         {!onSearch && (
           <div className="form-group">
