@@ -8,6 +8,7 @@ import Footer from "../components/Footer"
 import Identify from "../components/Identify";
 import CarDetails from "../pages/CarDetails";
 import CarList from "../components/CarList";
+import SearchResults from "../components/Identify"
 
 
 //create your first component
@@ -27,6 +28,8 @@ const Layout = () => {
             <Route element={<Identify/>} path="/Identify"/>
             <Route element={<CarList />} path="/" />
             <Route element={<CarDetails/>} path="/CarDetails/:id"/>
+            <Route path="/" exact component={Identify} />
+            <Route path="/search-results" component={SearchResults} />
           </Routes>
           <Footer/>
       

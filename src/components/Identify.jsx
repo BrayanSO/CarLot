@@ -1,16 +1,45 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect } from 'react';
 import "../Styles/CarFstyle.css";
 import db from '../Store/firebase';
 import firebase from 'firebase/compat/app';
+import { SearchCars } from '../components/CarSearch';
+import CarList from "../components/CarList"
 
 const Identify = ({ onSearch }) => {
   const [formData, setFormData] = useState({ make: '', style: '', model: '', transmission: '', price: '', fuel:'' , kilometres:'', doors:'',  images: [] });
+ 
   const [newMake, setNewMake] = useState('');
   const [newModel, setNewModel] = useState('');
   const [makes, setMakes] = useState(['Toyota', 'Ford', 'Honda']);
   const [models, setModels] = useState([]);
   const [showNewMakeField, setShowNewMakeField] = useState(false);
   const [showNewModelField, setShowNewModelField] = useState(false);
+  const [searchResults, setSearchResults] = useState([]);
+
+  useEffect(() => {
+    if (onSearch && formData.make !== '') {
+      // Realizar la búsqueda de automóviles solo si onSearch es verdadero y formData.make no está vacío
+      SearchCars(formData)
+        .then((results) => {
+          setSearchResults(results);
+        });
+    } else {
+      // Limpiar los resultados si onSearch es falso o formData.make está vacío
+      setSearchResults([]);
+    }
+  }, [onSearch, formData]);
+  const handleButtonAction = () => {
+    if (onSearch) {
+      // Realizar la búsqueda de automóviles utilizando la función importada
+      SearchCars(formData)
+        .then((results) => {
+          setSearchResults(results);
+        });
+    } else {
+      // Lógica para publicar el anuncio, por ejemplo, con handleSubmit
+      handleSubmit();
+    }
+  };
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -225,9 +254,21 @@ const Identify = ({ onSearch }) => {
   </div>
 )}
 
-        <button type="button" onClick={handleSubmit} className="submit-button">
+        <button type="button"  onClick={handleButtonAction} className="submit-button">
           {onSearch ? 'Search' : 'Post Ad'}
         </button>
+        {onSearch && searchResults.length > 0 && (
+        <div className="search-results">
+          <h2>Search Results</h2>
+          <div className="card-container">
+              {searchResults.map((result, index) => (
+                <CarList key={index} data={result} />
+              ))}
+            </div>
+          
+        </div>
+      )}
+        
       </form>
     </div>
   );
