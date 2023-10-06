@@ -4,8 +4,8 @@ export const SearchCars = async (formData) => {
   try {
     let query = db.collection('cars');
 
-    if (formData.make) {
-      query = query.where('make', '==', formData.make);
+    if (formData.brand) {
+      query = query.where('brand', '==', formData.brand);
     }
 
     if (formData.model) {

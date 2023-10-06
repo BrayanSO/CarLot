@@ -6,25 +6,25 @@ import { SearchCars } from '../components/CarSearch';
 import CarList from "../components/CarList"
 
 const Identify = ({ onSearch }) => {
-  const [formData, setFormData] = useState({ make: '', style: '', model: '', transmission: '', price: '', fuel:'' , kilometres:'', doors:'',  images: [] });
+  const [formData, setFormData] = useState({ brand: '', style: '', model: '', transmission: '', price: '', fuel:'' , kilometres:'', doors:'',  images: [] });
  
-  const [newMake, setNewMake] = useState('');
+  const [newbrand, setNewbrand] = useState('');
   const [newModel, setNewModel] = useState('');
-  const [makes, setMakes] = useState(['Toyota', 'Ford', 'Honda']);
+  const [brands, setbrands] = useState(['Toyota', 'Ford', 'Honda']);
   const [models, setModels] = useState([]);
-  const [showNewMakeField, setShowNewMakeField] = useState(false);
+  const [showNewbrandField, setShowNewbrandField] = useState(false);
   const [showNewModelField, setShowNewModelField] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
 
   useEffect(() => {
-    if (onSearch && formData.make !== '') {
-      // Realizar la búsqueda de automóviles solo si onSearch es verdadero y formData.make no está vacío
+    if (onSearch && formData.brand !== '') {
+      // Realizar la búsqueda de automóviles solo si onSearch es verdadero y formData.brand no está vacío
       SearchCars(formData)
         .then((results) => {
           setSearchResults(results);
         });
     } else {
-      // Limpiar los resultados si onSearch es falso o formData.make está vacío
+      // Limpiar los resultados si onSearch es falso o formData.brand está vacío
       setSearchResults([]);
     }
   }, [onSearch, formData]);
@@ -43,17 +43,17 @@ const Identify = ({ onSearch }) => {
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    if (name === "make") {
+    if (name === "brand") {
       if (value === "NuevaMarca") {
-        setShowNewMakeField(true);
+        setShowNewbrandField(true);
         setShowNewModelField(false);
-        setFormData({ ...formData, make: '' });
-        setNewMake('');
+        setFormData({ ...formData, brand: '' });
+        setNewbrand('');
         setNewModel('');
       } else {
-        setShowNewMakeField(false);
+        setShowNewbrandField(false);
         setShowNewModelField(false);
-        setFormData({ ...formData, make: value });
+        setFormData({ ...formData, brand: value });
       }
     } else if (name === "model") {
       if (value === "NuevoModelo") {
@@ -93,18 +93,18 @@ const Identify = ({ onSearch }) => {
   };
 
 
-  const handleNewMake = async () => {
-    if (newMake) {
-      const makeRef = await db.collection('marcas').add({ name: newMake });
-      setMakes([...makes, newMake]);
-      setFormData({ ...formData, make: makeRef.id });
-      setNewMake('');
+  const handleNewbrand = async () => {
+    if (newbrand) {
+      const brandRef = await db.collection('brand').add({ name: newbrand });
+      setbrands([...brands, newbrand]);
+      setFormData({ ...formData, brand: brandRef.id });
+      setNewbrand('');
     }
   };
 
   const handleNewModel = async () => {
     if (newModel) {
-      const modelRef = await db.collection('modelos').add({ name: newModel });
+      const modelRef = await db.collection('model').add({ name: newModel });
       setModels([...models, newModel]);
       setFormData({ ...formData, model: modelRef.id });
       setNewModel('');
@@ -119,7 +119,7 @@ const Identify = ({ onSearch }) => {
         .add(formData)
         .then(() => {
           console.log('Datos del automóvil agregados a Firestore correctamente.');
-          setFormData({ make: '', style: '', model: '', price: '', transmission: '', fuel:'', doors:'', kilometres:'', images: [] });
+          setFormData({ brand: '', style: '', model: '', price: '', transmission: '', fuel:'', doors:'', kilometres:'', images: [] });
         })
         .catch((error) => {
           console.error('Error al agregar datos del automóvil a Firestore:', error);
@@ -132,27 +132,27 @@ const Identify = ({ onSearch }) => {
       <h1>{onSearch ? 'Search for Cars' : 'Post new ad'}</h1>
       <form className="car-form">
         <div className="form-group">
-          <label>Make:</label>
-          <select name="make" value={formData.make} onChange={handleInputChange}>
-            <option value="">Select Make</option>
-            {makes.map((makeOption) => (
-              <option key={makeOption} value={makeOption}>
-                {makeOption}
+          <label>brand:</label>
+          <select name="brand" value={formData.brand} onChange={handleInputChange}>
+            <option value="">Select brand</option>
+            {brands.map((brandOption) => (
+              <option key={brandOption} value={brandOption}>
+                {brandOption}
               </option>
             ))}
           {onSearch ? null:  <option value="NuevaMarca">Nueva Marca</option>}
           </select>
         </div>
-        {showNewMakeField && (
+        {showNewbrandField && (
           <div className="form-group">
             <label>Nueva Marca:</label>
             <input
               type="text"
-              name="newMake"
-              value={newMake}
-              onChange={(event) => setNewMake(event.target.value)}
+              name="newbrand"
+              value={newbrand}
+              onChange={(event) => setNewbrand(event.target.value)}
             />
-            <button type="button" onClick={handleNewMake}>Agregar Nueva Marca</button>
+            <button type="button" onClick={handleNewbrand}>Agregar Nueva Marca</button>
           </div>
         )}
         <div className="form-group">
@@ -165,19 +165,19 @@ const Identify = ({ onSearch }) => {
               </option>
             ))}
             {!onSearch && <option value="NuevoModelo">Nuevo Modelo</option> }
-            {formData.make === 'Toyota' && (
+            {formData.brand === 'Toyota' && (
               <>
                 <option value="Camry">Camry</option>
                 <option value="Corolla">Corolla</option>
               </>
             )}
-            {formData.make === 'Ford' && (
+            {formData.brand === 'Ford' && (
               <>
                 <option value="F-150">F-150</option>
                 <option value="Escape">Escape</option>
               </>
             )}
-            {formData.make === 'Honda' && (
+            {formData.brand === 'Honda' && (
               <>
                 <option value="Civic">Civic</option>
                 <option value="Accord">Accord</option>

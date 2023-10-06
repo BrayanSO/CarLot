@@ -40,13 +40,13 @@ const CarDetails = () => {
               <Carousel autoPlay interval={3000} showThumbs={false}>
                 {car.images.map((image, imageIndex) => (
                   <div key={image.id}>
-                    <img src={image.url} alt={`${car.make} ${car.model}`} />
+                    <img src={image.url} alt={`${car.brand} ${car.model}`} />
                   </div>
                 ))}
               </Carousel>
               <div className="car-info">
                 <p>
-                  <strong>Make:</strong> {car.make} <br />
+                  <strong>Brand:</strong> {car.brand} <br />
                   <strong>Model:</strong> {car.model} <br />
                   <strong>Price:</strong> ${car.price} <br />
                   <strong>Style:</strong> {car.style} <br />
