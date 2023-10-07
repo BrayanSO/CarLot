@@ -95,7 +95,7 @@ const Identify = ({ onSearch }) => {
 
   const handleNewbrand = async () => {
     if (newbrand) {
-      const brandRef = await db.collection('brand').add({ name: newbrand });
+      const brandRef = await db.collection('brands').add({ name: newbrand });
       setbrands([...brands, newbrand]);
       setFormData({ ...formData, brand: brandRef.id });
       setNewbrand('');
@@ -104,7 +104,7 @@ const Identify = ({ onSearch }) => {
 
   const handleNewModel = async () => {
     if (newModel) {
-      const modelRef = await db.collection('model').add({ name: newModel });
+      const modelRef = await db.collection('models').add({ name: newModel });
       setModels([...models, newModel]);
       setFormData({ ...formData, model: modelRef.id });
       setNewModel('');

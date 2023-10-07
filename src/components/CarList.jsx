@@ -16,6 +16,7 @@ const CarList = () => {
     const db = firebase.firestore();
     const carCollection = db.collection('cars');
     
+    
 
     const fetchData = async () => {
       try {
@@ -35,28 +36,51 @@ const CarList = () => {
   }, []);
 
   const handleDeleteClick = async (index) => {
-    try {
-      const carToDelete = cars[index];
-      const db = firebase.firestore();
-      const carCollection = db.collection('cars');
-  
-      // Eliminar las imágenes del almacenamiento
-      for (const image of carToDelete.images) {
-        const imageName = image.id;
-        const storageRef = firebase.storage().ref().child(imageName);
-        await storageRef.delete();
+  try {
+    const carToDelete = cars[index];
+    const db = firebase.firestore();
+    const carCollection = db.collection('cars');
+    const brandCollection = db.collection('brands');
+    const modelCollection = db.collection('models');
+
+    // Check if the car has a brand associated
+    if (carToDelete.brand) {
+      // Get the brand document
+      const brandDoc = await brandCollection.doc(carToDelete.brand).get();
+      if (brandDoc.exists) {
+        // Check if the brand has any other associations
+        const brandQuerySnapshot = await carCollection.where('brands', '==', carToDelete.brand).get();
+        if (brandQuerySnapshot.empty) {
+          // Delete the brand if it has no other associations
+          await brandDoc.ref.delete();
+        }
       }
-  
-      // Eliminar la entrada en Firestore
-      await carCollection.doc(carToDelete.id).delete();
-  
-      const updatedCars = [...cars];
-      updatedCars.splice(index, 1); // Elimina el elemento del estado local
-      setCars(updatedCars);
-    } catch (error) {
-      console.error('Error al eliminar el automóvil:', error);
     }
-  };
+
+    // Check if the car has a model associated
+    if (carToDelete.model) {
+      // Get the model document
+      const modelDoc = await modelCollection.doc(carToDelete.model).get();
+      if (modelDoc.exists) {
+        // Check if the model has any other associations
+        const modelQuerySnapshot = await carCollection.where('models', '==', carToDelete.model).get();
+        if (modelQuerySnapshot.empty) {
+          // Delete the model if it has no other associations
+          await modelDoc.ref.delete();
+        }
+      }
+    }
+
+    // Delete the car document
+    await carCollection.doc(carToDelete.id).delete();
+
+    const updatedCars = [...cars];
+    updatedCars.splice(index, 1); // Remove the car from the local state
+    setCars(updatedCars);
+  } catch (error) {
+    console.error('Error deleting the car:', error);
+  }
+};
   const isLoggedIn = firebase.auth().currentUser !== null;
 
   return (
