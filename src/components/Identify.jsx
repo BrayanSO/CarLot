@@ -4,6 +4,7 @@ import db from '../Store/firebase';
 import firebase from 'firebase/compat/app';
 import { SearchCars } from '../components/CarSearch';
 import CarList from "../components/CarList"
+import deleteCollection from '../Store/deleteCollection';
 
 const Identify = ({ onSearch }) => {
   const [formData, setFormData] = useState({ brand: '', style: '', model: '', transmission: '', price: '', fuel:'' , kilometres:'', doors:'',  images: [] });
@@ -15,6 +16,37 @@ const Identify = ({ onSearch }) => {
   const [showNewbrandField, setShowNewbrandField] = useState(false);
   const [showNewModelField, setShowNewModelField] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
+
+
+  useEffect(() => {
+    // Cargar las marcas desde Firestore al iniciar la aplicación
+    db.collection('brands')
+      .get()
+      .then((querySnapshot) => {
+        const brandList = [];
+        querySnapshot.forEach((doc) => {
+          brandList.push(doc.data().name);
+        });
+        setbrands(brandList);
+      })
+      .catch((error) => {
+        console.error('Error al cargar las marcas desde Firestore:', error);
+      });
+
+    // Cargar los modelos desde Firestore al iniciar la aplicación
+    db.collection('models')
+      .get()
+      .then((querySnapshot) => {
+        const modelList = [];
+        querySnapshot.forEach((doc) => {
+          modelList.push(doc.data().name);
+        });
+        setModels(modelList);
+      })
+      .catch((error) => {
+        console.error('Error al cargar los modelos desde Firestore:', error);
+      });
+  }, []);
 
   useEffect(() => {
     if (onSearch && formData.brand !== '') {
@@ -119,7 +151,19 @@ const Identify = ({ onSearch }) => {
         .add(formData)
         .then(() => {
           console.log('Datos del automóvil agregados a Firestore correctamente.');
-          setFormData({ brand: '', style: '', model: '', price: '', transmission: '', fuel:'', doors:'', kilometres:'', images: [] });
+          // Llamar a deleteCollection después de agregar los datos del automóvil
+          const modelCollection = db.collection('models'); // Puedes ajustar la colección según tus necesidades
+          const referenceField = 'modelReference'; // Puedes ajustar el campo de referencia según tus necesidades
+          deleteCollection(modelCollection, db.collection('cars'), referenceField)
+          
+            .then(() => {
+              console.log('Colección de modelos eliminada con éxito (si no está referenciada).');
+            })
+            .catch((error) => {
+              console.error('Error al eliminar la colección de modelos:', error);
+            });
+  
+          setFormData({ brand: '', style: '', model: '', price: '', transmission: '', fuel: '', doors: '', kilometres: '', images: [] });
         })
         .catch((error) => {
           console.error('Error al agregar datos del automóvil a Firestore:', error);
