@@ -23,8 +23,6 @@ const Identify = ({ onSearch }) => {
 })
   }
   
-
-  
   const handleButtonAction = () => {
     if (onSearch) {
       // Realizar la búsqueda de automóviles utilizando la función importada
@@ -38,8 +36,6 @@ const Identify = ({ onSearch }) => {
     }
   };
   
-
-
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     if (name === "brand") {

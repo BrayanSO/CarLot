@@ -2,90 +2,39 @@ import React, { useState, useEffect } from 'react';
 import "../Styles/CarListSyle.css";
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
-import firebase from 'firebase/compat/app';
 import Canvas from './OffCanvas';
 import { Link } from 'react-router-dom';
-import deleteCollection from '../Store/deleteCollection';  // Importa la función deleteCollection
+import axios from 'axios';
+import firebase from 'firebase/compat/app';
+
 
 const CarList = () => {
   const [cars, setCars] = useState([]);
 
   useEffect(() => {
-    // Obtener la lista de autos desde Firebase Firestore
-    const db = firebase.firestore();
-    const carCollection = db.collection('cars');
-    
-    const fetchData = async () => {
-      try {
-        const querySnapshot = await carCollection.get();
-        const carsData = [];
-        
-        querySnapshot.forEach((doc) => {
-          carsData.push({ id: doc.id, ...doc.data() });
-        });
-        setCars(carsData);
-      } catch (error) {
-        console.error('Error al obtener datos de automóviles desde Firestore:', error);
-      }
-    };
-
-    fetchData();
+    // Realiza una solicitud GET para obtener la lista de coches
+    axios.get("http://localhost:3001/cars")
+      .then((response) => {
+        setCars(response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching cars:', error);
+      });
   }, []);
 
-  const handleDeleteClick = async (index) => {
-    try {
-      const carToDelete = cars[index];
-      const db = firebase.firestore();
-      const carCollection = db.collection('cars');
-      const brandCollection = db.collection('brands');
-      const modelCollection = db.collection('models');
-
-      // Check if the car has a brand associated
-      if (carToDelete.brand) {
-        // Get the brand document
-        const brandDoc = await brandCollection.doc(carToDelete.brand).get();
-        if (brandDoc.exists) {
-          // Check if the brand has any other associations
-          const brandQuerySnapshot = await carCollection.where('brands', '==', carToDelete.brand).get();
-          if (brandQuerySnapshot.empty) {
-            // Delete the brand if it has no other associations
-            await brandDoc.ref.delete();
-          }
-        }
-      }
-
-      // Check if the car has a model associated
-      if (carToDelete.model) {
-        // Get the model document
-        const modelDoc = await modelCollection.doc(carToDelete.model).get();
-        if (modelDoc.exists) {
-          // Check if the model has any other associations
-          const modelQuerySnapshot = await carCollection.where('models', '==', carToDelete.model).get();
-          if (modelQuerySnapshot.empty) {
-            // Delete the model if it has no other associations
-            await modelDoc.ref.delete();
-          }
-        }
-      }
-
-      // Delete the car document
-      await carCollection.doc(carToDelete.id).delete();
-
-      const updatedCars = [...cars];
-      updatedCars.splice(index, 1); // Remove the car from the local state
-      setCars(updatedCars);
-
-      // Llamar a deleteCollection después de eliminar el coche
-      const brandReference = 'brandReference'; // Ajusta el campo de referencia según tus necesidades
-      await deleteCollection(brandCollection, carCollection, brandReference);
-      console.log('Colección de marcas eliminada con éxito (si no está referenciada).');
-
-      const modelReference = 'modelReference'; // Ajusta el campo de referencia según tus necesidades
-      await deleteCollection(modelCollection, carCollection, modelReference);
-      console.log('Colección de modelos eliminada con éxito (si no está referenciada).');
-    } catch (error) {
-      console.error('Error deleting the car:', error);
-    }
+  const handleDeleteClick = (index) => {
+    const carToDelete = cars[index];
+    
+    // Realiza una solicitud DELETE para eliminar el coche por su ID
+    axios.delete(`http://localhost:3001/cars/${carToDelete.id}`)
+      .then(() => {
+        const updatedCars = [...cars];
+        updatedCars.splice(index, 1); // Elimina el coche del estado local
+        setCars(updatedCars);
+      })
+      .catch((error) => {
+        console.error('Error deleting the car:', error);
+      });
   };
   const isLoggedIn = firebase.auth().currentUser !== null;
 
@@ -93,14 +42,9 @@ const CarList = () => {
     <div className="car-list-container">
       <Canvas />
       <div className="car-card-container">
-        {cars.map((car, index) => (
-          <div key={index} className="car-card">
+      {cars !== null && cars.map((car, index) => (
+          <div key={car.id} className="car-card">
             <Carousel autoPlay interval={3000} showThumbs={false}>
-              {car.images.map((image, imageIndex) => (
-                <div key={image.id}> {/* Utiliza el ID de la imagen como clave */}
-                  <img src={image.url} alt={`${car.brand} ${car.model}`} />
-                </div>
-              ))}
             </Carousel>
             <div className="car-info">
               <p>
