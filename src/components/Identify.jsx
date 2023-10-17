@@ -1,10 +1,10 @@
-import React, { useState , useEffect } from 'react';
+import React, { useState  } from 'react';
 import "../Styles/CarFstyle.css";
 import db from '../Store/firebase';
 import firebase from 'firebase/compat/app';
 import { SearchCars } from '../components/CarSearch';
 import CarList from "../components/CarList"
-import deleteCollection from '../Store/deleteCollection';
+import axios from 'axios';
 
 const Identify = ({ onSearch }) => {
   const [formData, setFormData] = useState({ brand: '', style: '', model: '', transmission: '', price: '', fuel:'' , kilometres:'', doors:'',  images: [] });
@@ -17,49 +17,14 @@ const Identify = ({ onSearch }) => {
   const [showNewModelField, setShowNewModelField] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
 
+  const addcar = ()=>{
+    axios.post("http://localhost:3001/create", formData).then(() => {
+  alert("Carro registrado");
+})
+  }
+  
 
-  useEffect(() => {
-    // Cargar las marcas desde Firestore al iniciar la aplicación
-    db.collection('brands')
-      .get()
-      .then((querySnapshot) => {
-        const brandList = [];
-        querySnapshot.forEach((doc) => {
-          brandList.push(doc.data().name);
-        });
-        setbrands(brandList);
-      })
-      .catch((error) => {
-        console.error('Error al cargar las marcas desde Firestore:', error);
-      });
-
-    // Cargar los modelos desde Firestore al iniciar la aplicación
-    db.collection('models')
-      .get()
-      .then((querySnapshot) => {
-        const modelList = [];
-        querySnapshot.forEach((doc) => {
-          modelList.push(doc.data().name);
-        });
-        setModels(modelList);
-      })
-      .catch((error) => {
-        console.error('Error al cargar los modelos desde Firestore:', error);
-      });
-  }, []);
-
-  useEffect(() => {
-    if (onSearch && formData.brand !== '') {
-      // Realizar la búsqueda de automóviles solo si onSearch es verdadero y formData.brand no está vacío
-      SearchCars(formData)
-        .then((results) => {
-          setSearchResults(results);
-        });
-    } else {
-      // Limpiar los resultados si onSearch es falso o formData.brand está vacío
-      setSearchResults([]);
-    }
-  }, [onSearch, formData]);
+  
   const handleButtonAction = () => {
     if (onSearch) {
       // Realizar la búsqueda de automóviles utilizando la función importada
@@ -68,10 +33,12 @@ const Identify = ({ onSearch }) => {
           setSearchResults(results);
         });
     } else {
-      // Lógica para publicar el anuncio, por ejemplo, con handleSubmit
-      handleSubmit();
+      // Lógica para publicar el anuncio
+      addcar(formData); // Llama a sendDataToDatabase
     }
   };
+  
+
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -104,14 +71,14 @@ const Identify = ({ onSearch }) => {
   const handleImageChange = async (event) => {
     const imageFiles = event.target.files;
     const imageUrls = [];
-
+  
     const storageRef = firebase.storage().ref();
-
+  
     for (const file of imageFiles) {
       const imageName = `${Date.now()}_${file.name}`;
-
+  
       const imageRef = storageRef.child(imageName);
-
+  
       try {
         await imageRef.put(file);
         const imageUrl = await imageRef.getDownloadURL();
@@ -120,10 +87,10 @@ const Identify = ({ onSearch }) => {
         console.error('Error al cargar la imagen al Storage de Firebase:', error);
       }
     }
-
+  
     setFormData({ ...formData, images: [...formData.images, ...imageUrls] });
   };
-
+  
 
   const handleNewbrand = async () => {
     if (newbrand) {
@@ -143,33 +110,6 @@ const Identify = ({ onSearch }) => {
     }
   };
 
-  const handleSubmit = () => {
-    if (onSearch) {
-      onSearch(formData);
-    } else {
-      db.collection('cars')
-        .add(formData)
-        .then(() => {
-          console.log('Datos del automóvil agregados a Firestore correctamente.');
-          // Llamar a deleteCollection después de agregar los datos del automóvil
-          const modelCollection = db.collection('models'); // Puedes ajustar la colección según tus necesidades
-          const referenceField = 'modelReference'; // Puedes ajustar el campo de referencia según tus necesidades
-          deleteCollection(modelCollection, db.collection('cars'), referenceField)
-          
-            .then(() => {
-              console.log('Colección de modelos eliminada con éxito (si no está referenciada).');
-            })
-            .catch((error) => {
-              console.error('Error al eliminar la colección de modelos:', error);
-            });
-  
-          setFormData({ brand: '', style: '', model: '', price: '', transmission: '', fuel: '', doors: '', kilometres: '', images: [] });
-        })
-        .catch((error) => {
-          console.error('Error al agregar datos del automóvil a Firestore:', error);
-        });
-    }
-  };
 
   return (
     <div className="car-form-container">
