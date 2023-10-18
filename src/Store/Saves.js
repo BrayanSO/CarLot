@@ -112,24 +112,26 @@ app.delete("/brands/:brandId", (req, res) => {
 
 // add a new brands
 app.post("/brands", (req, res) => {
-  const brand = req.body.name; 
+  const newBrand = req.body.name; 
 
-  db.query('INSERT INTO brands (name) VALUES (?)', [brand], (err, result) => {
+  db.query('INSERT INTO brands (brand_name) VALUES (?)', [newBrand], (err, result) => {
     if (err) {
       console.log(err);
       res.status(500).send("Error al insertar la nueva marca.");
     } else {
+      const newBrandId = result.insertId; // Obtiene la ID de la nueva marca creada
       console.log("Marca registrada con éxito");
-      res.send("Marca registrada con éxito");
+      res.status(201).json({ message: "Marca registrada con éxito", id: newBrandId });
     }
   });
 });
+
 
 // add a new Models
 app.post("/models", (req, res) => {
   const model = req.body.name; 
 
-  db.query('INSERT INTO models (name) VALUES (?)', [model], (err, result) => {
+  db.query('INSERT INTO models (model_name) VALUES (?)', [model], (err, result) => {
     if (err) {
       console.log(err);
       res.status(500).send("Error al insertar la nueva modelo.");

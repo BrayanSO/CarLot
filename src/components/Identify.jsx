@@ -82,7 +82,6 @@ const Identify = ({ onSearch }) => {
     }
   };
 
-
   const handleNewbrand = async () => {
     if (newbrand) {
       // Verificar si la marca ya existe
@@ -92,17 +91,12 @@ const Identify = ({ onSearch }) => {
         // La marca ya existe, muestra una alerta
         alert("La marca ya existe");
       } else {
-
-
-
-        
         // La marca no existe, puedes agregarla
         axios.post("http://localhost:3001/brands", { name: newbrand })
           .then((response) => {
-            // Obtén la ID de la marca creada desde la respuesta del servidor (si la devuelve).
-            const newBrandId = response.data.id; // Ajusta esto según la estructura de respuesta de tu API.
-            setbrands([...brands, { id: newBrandId, name: newbrand }]); // Agregar la marca a la lista de marcas
-            setFormData({ ...formData, brand: newBrandId });
+            const newBrandId = response.data.id; // Obtiene la ID de la nueva marca creada
+            setbrands([...brands, { id: newBrandId, name: newbrand }]); // Agrega la marca a la lista de marcas
+            setFormData({ ...formData, brand: newBrandId }); // Vincula la nueva marca a formData
             setNewbrand('');
           })
           .catch((error) => {
@@ -111,6 +105,8 @@ const Identify = ({ onSearch }) => {
       }
     }
   };
+  
+  
   
   
   const handleNewModel = async () => {
