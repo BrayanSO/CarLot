@@ -1,6 +1,5 @@
-import React, { useState  } from 'react';
+import React, { useState, useEffect  } from 'react';
 import "../Styles/CarFstyle.css";
-import firebase from 'firebase/compat/app';
 import { SearchCars } from '../components/CarSearch';
 import CarList from "../components/CarList"
 import axios from 'axios';
@@ -10,11 +9,31 @@ const Identify = ({ onSearch }) => {
  
   const [newbrand, setNewbrand] = useState('');
   const [newModel, setNewModel] = useState('');
-  const [brands, setbrands] = useState(['Toyota', 'Ford', 'Honda']);
+  const [brands, setbrands] = useState([]);
   const [models, setModels] = useState([]);
   const [showNewbrandField, setShowNewbrandField] = useState(false);
   const [showNewModelField, setShowNewModelField] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
+
+  useEffect(() => {
+    // Cargar la lista de marcas
+    axios.get("http://localhost:3001/brands")
+      .then((response) => {
+        setbrands(response.data);
+      })
+      .catch((error) => {
+        console.error('Error al cargar la lista de marcas:', error);
+      });
+
+    // Cargar la lista de modelos
+    axios.get("http://localhost:3001/models")
+      .then((response) => {
+        setModels(response.data);
+      })
+      .catch((error) => {
+        console.error('Error al cargar la lista de modelos:', error);
+      });
+  }, []);
 
   const addcar = ()=>{
     axios.post("http://localhost:3001/create", formData).then(() => {
@@ -63,63 +82,58 @@ const Identify = ({ onSearch }) => {
     }
   };
 
-  const handleImageChange = async (event) => {
-    const imageFiles = event.target.files;
-    const imageUrls = [];
-  
-    const storageRef = firebase.storage().ref();
-  
-    for (const file of imageFiles) {
-      const imageName = `${Date.now()}_${file.name}`;
-  
-      const imageRef = storageRef.child(imageName);
-  
-      try {
-        await imageRef.put(file);
-        const imageUrl = await imageRef.getDownloadURL();
-        imageUrls.push({ id: imageName, url: imageUrl });
-      } catch (error) {
-        console.error('Error al cargar la imagen al Storage de Firebase:', error);
-      }
-    }
-  
-    setFormData({ ...formData, images: [...formData.images, ...imageUrls] });
-  };
-  
 
   const handleNewbrand = async () => {
     if (newbrand) {
-      axios.post("http://localhost:3001/brands", { name: newbrand })
-        .then((response) => {
-          // Obtén la ID de la marca creada desde la respuesta del servidor (si la devuelve).
-          const newBrandId = response.data.id; // Ajusta esto según la estructura de respuesta de tu API.
-          setbrands([...brands, newbrand]);
-          setFormData({ ...formData, brand: newBrandId });
-          setNewbrand('');
-        })
-        .catch((error) => {
-          console.error('Error al guardar la nueva marca:', error);
-        });
+      // Verificar si la marca ya existe
+      const isBrandExists = brands.some((brand) => brand.name === newbrand);
+  
+      if (isBrandExists) {
+        // La marca ya existe, muestra una alerta
+        alert("La marca ya existe");
+      } else {
+        // La marca no existe, puedes agregarla
+        axios.post("http://localhost:3001/brands", { name: newbrand })
+          .then((response) => {
+            // Obtén la ID de la marca creada desde la respuesta del servidor (si la devuelve).
+            const newBrandId = response.data.id; // Ajusta esto según la estructura de respuesta de tu API.
+            setbrands([...brands, { id: newBrandId, name: newbrand }]); // Agregar la marca a la lista de marcas
+            setFormData({ ...formData, brand: newBrandId });
+            setNewbrand('');
+          })
+          .catch((error) => {
+            console.error('Error al guardar la nueva marca:', error);
+          });
+      }
     }
   };
   
-
+  
   const handleNewModel = async () => {
     if (newModel) {
-      // Realiza una solicitud para guardar el nuevo modelo en la base de datos.
-      axios.post("http://localhost:3001/models", { name: newModel })
-        .then((response) => {
-          // Obtén la ID del modelo creado desde la respuesta del servidor (si la devuelve).
-          const newModelId = response.data.id; // Ajusta esto según la estructura de respuesta de tu API.
-          setModels([...models, newModel]);
-          setFormData({ ...formData, model: newModelId });
-          setNewModel('');
-        })
-        .catch((error) => {
-          console.error('Error al guardar el nuevo modelo:', error);
-        });
+      // Verificar si el modelo ya existe
+      const isModelExists = models.some((model) => model.name === newModel);
+  
+      if (isModelExists) {
+        // El modelo ya existe, muestra una alerta
+        alert("El modelo ya existe");
+      } else {
+        // El modelo no existe, puedes agregarlo
+        axios.post("http://localhost:3001/models", { name: newModel })
+          .then((response) => {
+            // Obtén la ID del modelo creado desde la respuesta del servidor (si la devuelve).
+            const newModelId = response.data.id; // Ajusta esto según la estructura de respuesta de tu API.
+            setModels([...models, { id: newModelId, name: newModel }]); // Agregar el modelo a la lista de modelos
+            setFormData({ ...formData, model: newModelId });
+            setNewModel('');
+          })
+          .catch((error) => {
+            console.error('Error al guardar el nuevo modelo:', error);
+          });
+      }
     }
   };
+  
   
 
 
@@ -132,8 +146,8 @@ const Identify = ({ onSearch }) => {
           <select name="brand" value={formData.brand} onChange={handleInputChange}>
             <option value="">Select brand</option>
             {brands.map((brandOption) => (
-              <option key={brandOption} value={brandOption}>
-                {brandOption}
+             <option key={brandOption.id} value={brandOption.name}>
+                {brandOption.name}
               </option>
             ))}
           {onSearch ? null:  <option value="NuevaMarca">Nueva Marca</option>}
@@ -156,8 +170,8 @@ const Identify = ({ onSearch }) => {
           <select name="model" value={formData.model} onChange={handleInputChange}>
             <option value="">Select Model</option>
             {models.map((modelOption) => (
-              <option key={modelOption} value={modelOption}>
-                {modelOption}
+              <option key={modelOption.id} value={modelOption.name}>
+                {modelOption.name}
               </option>
             ))}
             {!onSearch && <option value="NuevoModelo">Nuevo Modelo</option> }
@@ -239,7 +253,7 @@ const Identify = ({ onSearch }) => {
         {!onSearch && (
           <div className="form-group">
             <label>Photos:</label> <br />
-            <input type="file" name="image" accept="image/*" onChange={handleImageChange} multiple={true} />
+            <input type="file" name="image" accept="image/*" multiple={true} />
           </div>
         )}
        {formData.images.length > 0 && !onSearch && (
@@ -258,7 +272,7 @@ const Identify = ({ onSearch }) => {
           <h2>Search Results</h2>
           <div className="card-container">
               {searchResults.map((result, index) => (
-                <CarList key={index} data={result} />
+                <CarList key={result.id} data={result} />
               ))}
             </div>
           

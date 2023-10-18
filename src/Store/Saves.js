@@ -32,6 +32,8 @@ app.post("/create",(req,res)=>{
   }
  });
 });
+
+//get the posts
 app.get("/cars",(req,res)=>{
   db.query('SELECT * FROM cars',
    (err,result)=>{
@@ -43,6 +45,30 @@ app.get("/cars",(req,res)=>{
   }
   );
  });
+
+ //get the brands
+app.get("/brands", (req, res) => {
+  db.query('SELECT * FROM brands', (err, result) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send("Error al obtener la lista de marcas.");
+    } else {
+      res.json(result); // Enviar la lista de marcas como respuesta en formato JSON
+    }
+  });
+});
+ //get the models
+ app.get("/models", (req, res) => {
+  db.query('SELECT * FROM models', (err, result) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send("Error al obtener la lista de models.");
+    } else {
+      res.json(result); // Enviar la lista de marcas como respuesta en formato JSON
+    }
+  });
+});
+
 
   // Realiza una consulta DELETE para eliminar el coche con el ID especificado
  app.delete("/cars/:carId", (req, res) => {
@@ -56,6 +82,33 @@ app.get("/cars",(req,res)=>{
     }
   });
 });
+
+// Realiza una consulta DELETE para eliminar el brand con el ID especificado
+app.delete("/models/:modelId", (req, res) => {
+  const modelId = req.params.modelId;
+  db.query('DELETE FROM models WHERE id = ?', modelId, (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send("Error al eliminar el modelo");
+    } else {
+      res.status(200).send("Modelo eliminado exitosamente");
+    }
+  });
+});
+
+// Realiza una consulta DELETE para eliminar el brand con el ID especificado
+app.delete("/brands/:brandId", (req, res) => {
+  const brandId = req.params.brandId;
+  db.query('DELETE FROM brands WHERE id = ?', brandId, (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send("Error al eliminar la marca");
+    } else {
+      res.status(200).send("Marca eliminada exitosamente");
+    }
+  });
+});
+
 
 // add a new brands
 app.post("/brands", (req, res) => {

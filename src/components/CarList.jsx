@@ -7,9 +7,10 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import firebase from 'firebase/compat/app';
 
-
 const CarList = () => {
   const [cars, setCars] = useState([]);
+  const [brands, setBrands] = useState([]);
+  const [models, setModels] = useState([]);
 
   useEffect(() => {
     // Realiza una solicitud GET para obtener la lista de coches
@@ -20,22 +21,72 @@ const CarList = () => {
       .catch((error) => {
         console.error('Error fetching cars:', error);
       });
-  }, []);
 
-  const handleDeleteClick = (index) => {
-    const carToDelete = cars[index];
-    
-    // Realiza una solicitud DELETE para eliminar el coche por su ID
-    axios.delete(`http://localhost:3001/cars/${carToDelete.id}`)
-      .then(() => {
-        const updatedCars = [...cars];
-        updatedCars.splice(index, 1); // Elimina el coche del estado local
-        setCars(updatedCars);
+    // Realiza una solicitud GET para obtener la lista de marcas
+    axios.get("http://localhost:3001/brands")
+      .then((response) => {
+        setBrands(response.data);
       })
       .catch((error) => {
-        console.error('Error deleting the car:', error);
+        console.error('Error fetching brands:', error);
       });
+
+    // Realiza una solicitud GET para obtener la lista de modelos
+    axios.get("http://localhost:3001/models")
+      .then((response) => {
+        setModels(response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching models:', error);
+      });
+  }, []);
+
+  const handleDeleteClick = async (index) => {
+    const carToDelete = cars[index];
+
+    // Verificar si la marca y el modelo del automóvil están en uso por otros automóviles.
+    const brandInUse = cars.some((car) => car.brand === carToDelete.brand);
+    const modelInUse = cars.some((car) => car.model === carToDelete.model);
+
+    // Mostrar un cuadro de diálogo de confirmación antes de eliminar
+    let isConfirmed = true;
+
+    if (brandInUse || modelInUse) {
+      isConfirmed = window.confirm(
+        "Esta marca o modelo está siendo utilizada por otros automóviles. ¿Aún deseas eliminar este automóvil?"
+      );
+    }
+
+    if (isConfirmed) {
+      try {
+        // Realiza una solicitud DELETE para eliminar el coche por su ID
+        await axios.delete(`http://localhost:3001/cars/${carToDelete.id}`);
+        const updatedCars = [...cars];
+        updatedCars.splice(index, 1); // Elimina el coche del estado local
+        setCars(updatedCars); // Actualiza la vista eliminando el coche
+
+        // Si la marca y el modelo no están en uso, elimina también de la lista de marcas y modelos
+        if (!brandInUse) {
+          // Realiza una solicitud DELETE para eliminar la marca (ajusta la URL según tu API)
+          await axios.delete(`http://localhost:3001/brands/${carToDelete.brand}`);
+          // Actualiza la lista de marcas local
+          const updatedBrands = brands.filter((brand) => brand.id !== carToDelete.brand);
+          setBrands(updatedBrands);
+        }
+
+        if (!modelInUse) {
+          // Realiza una solicitud DELETE para eliminar el modelo (ajusta la URL según tu API)
+          await axios.delete(`http://localhost:3001/models/${carToDelete.model}`);
+          // Actualiza la lista de modelos local
+          const updatedModels = models.filter((model) => model.id !== carToDelete.model);
+          setModels(updatedModels);
+        }
+      } catch (error) {
+        console.error('Error deleting the car:', error);
+      }
+    }
   };
+
   const isLoggedIn = firebase.auth().currentUser !== null;
 
   return (
