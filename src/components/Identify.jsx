@@ -1,6 +1,5 @@
 import React, { useState  } from 'react';
 import "../Styles/CarFstyle.css";
-import db from '../Store/firebase';
 import firebase from 'firebase/compat/app';
 import { SearchCars } from '../components/CarSearch';
 import CarList from "../components/CarList"
@@ -90,21 +89,38 @@ const Identify = ({ onSearch }) => {
 
   const handleNewbrand = async () => {
     if (newbrand) {
-      const brandRef = await db.collection('brands').add({ name: newbrand });
-      setbrands([...brands, newbrand]);
-      setFormData({ ...formData, brand: brandRef.id });
-      setNewbrand('');
+      axios.post("http://localhost:3001/brands", { name: newbrand })
+        .then((response) => {
+          // Obtén la ID de la marca creada desde la respuesta del servidor (si la devuelve).
+          const newBrandId = response.data.id; // Ajusta esto según la estructura de respuesta de tu API.
+          setbrands([...brands, newbrand]);
+          setFormData({ ...formData, brand: newBrandId });
+          setNewbrand('');
+        })
+        .catch((error) => {
+          console.error('Error al guardar la nueva marca:', error);
+        });
     }
   };
+  
 
   const handleNewModel = async () => {
     if (newModel) {
-      const modelRef = await db.collection('models').add({ name: newModel });
-      setModels([...models, newModel]);
-      setFormData({ ...formData, model: modelRef.id });
-      setNewModel('');
+      // Realiza una solicitud para guardar el nuevo modelo en la base de datos.
+      axios.post("http://localhost:3001/models", { name: newModel })
+        .then((response) => {
+          // Obtén la ID del modelo creado desde la respuesta del servidor (si la devuelve).
+          const newModelId = response.data.id; // Ajusta esto según la estructura de respuesta de tu API.
+          setModels([...models, newModel]);
+          setFormData({ ...formData, model: newModelId });
+          setNewModel('');
+        })
+        .catch((error) => {
+          console.error('Error al guardar el nuevo modelo:', error);
+        });
     }
   };
+  
 
 
   return (

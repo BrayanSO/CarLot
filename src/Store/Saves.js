@@ -22,6 +22,8 @@ app.post("/create",(req,res)=>{
  const doors = req.body.doors;
  const kilometres = req.body.kilometres;
 
+
+// Add a new post car
  db.query('INSERT INTO cars(brand,model,style,transmission,price,fuel,doors,kilometres) Values(?,?,?,?,?,?,?,?)',[brand,model,style,transmission,price,fuel,doors,kilometres], (err,result)=>{
   if (err){
     console.log(err);
@@ -42,10 +44,9 @@ app.get("/cars",(req,res)=>{
   );
  });
 
+  // Realiza una consulta DELETE para eliminar el coche con el ID especificado
  app.delete("/cars/:carId", (req, res) => {
   const carId = req.params.carId;
-
-  // Realiza una consulta DELETE para eliminar el coche con el ID especificado
   db.query('DELETE FROM cars WHERE id = ?', carId, (err, result) => {
     if (err) {
       console.log(err);
@@ -56,7 +57,38 @@ app.get("/cars",(req,res)=>{
   });
 });
 
-app.listen(3001,()=>{
-    console.log("corriendo en el puerto 3001");
+// add a new brands
+app.post("/brands", (req, res) => {
+  const brand = req.body.name; 
 
-})
+  db.query('INSERT INTO brands (name) VALUES (?)', [brand], (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send("Error al insertar la nueva marca.");
+    } else {
+      console.log("Marca registrada con éxito");
+      res.send("Marca registrada con éxito");
+    }
+  });
+});
+
+// add a new Models
+app.post("/models", (req, res) => {
+  const model = req.body.name; 
+
+  db.query('INSERT INTO models (name) VALUES (?)', [model], (err, result) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send("Error al insertar la nueva modelo.");
+    } else {
+      console.log("Modelo registrada con éxito");
+      res.send("modelo registrada con éxito");
+    }
+  });
+});
+
+app.listen(3001, () => {
+  console.log("Corriendo en el puerto 3001");
+});
+
+
