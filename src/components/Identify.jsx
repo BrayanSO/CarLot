@@ -92,6 +92,10 @@ const Identify = ({ onSearch }) => {
         // La marca ya existe, muestra una alerta
         alert("La marca ya existe");
       } else {
+
+
+
+        
         // La marca no existe, puedes agregarla
         axios.post("http://localhost:3001/brands", { name: newbrand })
           .then((response) => {
