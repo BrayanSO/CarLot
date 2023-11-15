@@ -114,7 +114,7 @@ app.delete("/brands/:brandId", (req, res) => {
 app.post("/brands", (req, res) => {
   const newBrand = req.body.name; 
 
-  db.query('INSERT INTO brands (brand_name) VALUES (?)', [newBrand], (err, result) => {
+  db.query('INSERT INTO brands (brand) VALUES (?)', [newBrand], (err, result) => {
     if (err) {
       console.log(err);
       res.status(500).send("Error al insertar la nueva marca.");
@@ -131,7 +131,7 @@ app.post("/brands", (req, res) => {
 app.post("/models", (req, res) => {
   const model = req.body.name; 
 
-  db.query('INSERT INTO models (model_name) VALUES (?)', [model], (err, result) => {
+  db.query('INSERT INTO models (model) VALUES (?)', [model], (err, result) => {
     if (err) {
       console.log(err);
       res.status(500).send("Error al insertar la nueva modelo.");
@@ -140,6 +140,14 @@ app.post("/models", (req, res) => {
       res.send("modelo registrada con éxito");
     }
   });
+});
+
+const multer = require('multer'); // Para gestionar la carga de archivos
+const upload = multer({ dest: 'uploads/' }); // Directorio donde se guardarán las imágenes
+
+app.post('/upload', upload.single('image'), (req, res) => {
+  // req.file contiene la información de la imagen subida
+  // Aquí puedes guardar req.file en la base de datos y devolver una respuesta al cliente
 });
 
 app.listen(3001, () => {

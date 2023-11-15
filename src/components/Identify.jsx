@@ -107,8 +107,6 @@ const Identify = ({ onSearch }) => {
   };
   
   
-  
-  
   const handleNewModel = async () => {
     if (newModel) {
       // Verificar si el modelo ya existe
@@ -134,6 +132,21 @@ const Identify = ({ onSearch }) => {
     }
   };
   
+  const handleImageChange = (event) => {
+    const imageFile = event.target.files[0]; // Obtiene el archivo de imagen seleccionado
+    const formData = new FormData();
+    formData.append('image', imageFile); // Agrega la imagen al objeto FormData
+  
+    // Ahora puedes enviar formData al servidor a través de una solicitud POST
+    axios.post('http://localhost:3001/upload', formData)
+      .then((response) => {
+        // El servidor debe responder con información sobre la imagen cargada
+        console.log('Imagen cargada:', response.data);
+      })
+      .catch((error) => {
+        console.error('Error al cargar la imagen:', error);
+      });
+  };
   
 
 
@@ -253,7 +266,7 @@ const Identify = ({ onSearch }) => {
         {!onSearch && (
           <div className="form-group">
             <label>Photos:</label> <br />
-            <input type="file" name="image" accept="image/*" multiple={true} />
+            <input type="file" name="image" accept="image/*" multiple={true} onChange={handleImageChange} />
           </div>
         )}
        {formData.images.length > 0 && !onSearch && (
