@@ -95,8 +95,7 @@ const CarList = () => {
       <div className="car-card-container">
       {cars !== null && cars.map((car, index) => (
           <div key={car.id} className="car-card">
-            <Carousel autoPlay interval={3000} showThumbs={false}>
-            </Carousel>
+              <Carousel key={`carousel-${car.id}`} autoPlay interval={3000} showThumbs={false}></Carousel>
             <div className="car-info">
               <p>
                 <strong>brand:</strong> {car.brand} <br />
