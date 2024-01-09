@@ -94,8 +94,15 @@ const CarList = () => {
       <Canvas />
       <div className="car-card-container">
       {cars !== null && cars.map((car, index) => (
-          <div key={car.id} className="car-card">
-              <Carousel key={`carousel-${car.id}`} autoPlay interval={3000} showThumbs={false}></Carousel>
+        <div key={car.id} className="car-card">
+          <Carousel key={`carousel-${car.id}`} autoPlay interval={3000} showThumbs={false}>
+          {Array.isArray(car.images) && car.images.map((image, imgIndex) => (
+  <div key={`image-${imgIndex}`}>
+    <img src={image} alt={`Car ${index + 1} - ${imgIndex + 1}`} />
+  </div>
+))}
+
+          </Carousel>
             <div className="car-info">
               <p>
               <strong>Brand:</strong> {brands.find(brand => brand.id === car.brand_id)?.name || "Unknown Brand"} <br />

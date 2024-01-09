@@ -1,9 +1,21 @@
 const express = require ("express");
 const app = express ();
+const multer = require("multer");
 const mysql = require("mysql");
 const cors = require("cors");
+
 app.use(cors());
 app.use(express.json());
+
+
+const storage = multer.diskStorage({
+  destination: 'uploads/',
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + '-' + file.originalname);
+  },
+});
+
+const upload = multer({ storage: storage });
 
 const db = mysql.createConnection ({
   host: "localhost",
@@ -11,6 +23,27 @@ const db = mysql.createConnection ({
   password:"",
   database:"cars_list"
 });
+
+app.post("/create", upload.array("images", 5), (req, res) => {
+  const { brandId, modelId, style, transmission, price, fuel, doors, kilometres } = req.body;
+
+  // Verifica que req.files esté definido antes de usar map
+  const images = req.files ? req.files.map(file => file.filename) : [];
+
+  db.query(
+    "INSERT INTO cars(brand_id, model_id, style, transmission, price, fuel, doors, kilometres, images) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+    [brandId, modelId, style, transmission, price, fuel, doors, kilometres, JSON.stringify(images)],
+    (err, result) => {
+      if (err) {
+        console.error(err);
+        res.status(500).send("Error al agregar el coche");
+      } else {
+        res.status(200).send("Coche agregado exitosamente");
+      }
+    }
+  );
+});
+
 
 app.post("/create",(req,res)=>{
  const brandId = req.body.brandId;
@@ -140,16 +173,9 @@ app.post("/models", (req, res) => {
   });
 });
 
-const multer = require('multer'); // Para gestionar la carga de archivos
-const upload = multer({ dest: 'uploads/' }); // Directorio donde se guardarán las imágenes
 
-app.post('/upload', upload.single('image'), (req, res) => {
-  // req.file contiene la información de la imagen subida
-  // Aquí puedes guardar req.file en la base de datos y devolver una respuesta al cliente
+const PORT = 3001;
+app.listen(PORT, () => {
+  console.log(`Servidor en ejecución en el puerto ${PORT}`);
 });
-
-app.listen(3001, () => {
-  console.log("Corriendo en el puerto 3001");
-});
-
 
