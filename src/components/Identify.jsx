@@ -3,6 +3,7 @@ import "../Styles/CarFstyle.css";
 import { SearchCars } from '../components/CarSearch';
 import CarList from "../components/CarList";
 import axios from 'axios';
+import ImageUpload from './ImageUpload.jsx';
 
 const Identify = ({ onSearch }) => {
   const [formData, setFormData] = useState({
@@ -118,15 +119,9 @@ const Identify = ({ onSearch }) => {
     }
   }
 };
-
-  const handleImageChange = (event) => {
-    const imageFiles = event.target.files;
-    const imageArray = Array.from(imageFiles).map((file) => ({
-      id: file.name,
-      url: URL.createObjectURL(file),
-    }));
-    setFormData({ ...formData, images: imageArray });
-  };
+        const handleImageChange = (imageArray) => {
+     setFormData({ ...formData, images: imageArray });
+      };
 
   return (
     <div className="car-form-container">
@@ -230,21 +225,9 @@ const Identify = ({ onSearch }) => {
         </div>
         {!onSearch && (
           <div className="form-group">
-            <label>Photos:</label> <br />
-            <input type="file" name="image" accept="image/*" multiple={true} onChange={handleImageChange} />
+            <ImageUpload onImageChange={handleImageChange} />
           </div>
         )}
-
-{formData.images.length > 0 && !onSearch && (
-      <div className="image-preview">
-        {formData.images.map((image) => (
-      <img key={image.id} src={image.url} alt={image.id} />
-        ))} 
-
-  </div>  
-      
-)} 
-
         <button type="button"  onClick={handleButtonAction} className="submit-button">
           {onSearch ? 'Search' : 'Post Ad'}
         </button>
