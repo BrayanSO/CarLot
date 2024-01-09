@@ -98,8 +98,8 @@ const CarList = () => {
               <Carousel key={`carousel-${car.id}`} autoPlay interval={3000} showThumbs={false}></Carousel>
             <div className="car-info">
               <p>
-                <strong>brand:</strong> {car.brand} <br />
-                <strong>Model:</strong> {car.model} <br />
+              <strong>Brand:</strong> {brands.find(brand => brand.id === car.brand_id)?.name || "Unknown Brand"} <br />
+              <strong>Model:</strong> {models.find(model => model.id === car.model_id)?.name || "Unknown Model"} <br />
                 <strong>Price :</strong> ${car.price}<br/>
                 <strong>Style :</strong> {car.style}<br/>
                 <strong>Transmission :</strong> {car.transmission}<br/>

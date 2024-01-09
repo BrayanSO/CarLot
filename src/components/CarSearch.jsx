@@ -5,11 +5,11 @@ export const SearchCars = async (formData) => {
     let query = db.collection('cars');
 
     if (formData.brand) {
-      query = query.where('brands', '==', formData.brand);
+      query = query.where('brands', '==', formData.name);
     }
 
     if (formData.model) {
-      query = query.where('models', '==', formData.model);
+      query = query.where('models', '==', formData.name);
     }
 
     // Agrega otras condiciones de búsqueda según los campos de formData

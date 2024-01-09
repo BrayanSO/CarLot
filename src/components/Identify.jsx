@@ -33,24 +33,23 @@ const Identify = ({ onSearch }) => {
     fetchData();
   }, []);
 
-  const addCar = () => {
-    axios.post("http://localhost:3001/create", formData)
-      .then(() => {
-        alert("Carro registrado");
-      })
-      .catch((error) => {
-        console.error('Error al registrar el carro:', error);
-      });
-  };
-
   const handleButtonAction = () => {
+    const carData = { ...formData, brandId: formData.brandId, modelId: formData.modelId };
+  
     if (onSearch) {
-      SearchCars(formData)
+      SearchCars(carData)
         .then((results) => {
           setSearchResults(results);
         });
     } else {
-      addCar();
+      axios.post("http://localhost:3001/create", carData)
+        .then(() => {
+          alert("Carro registrado");
+          // Puedes realizar alguna acción adicional después de agregar el carro
+        })
+        .catch((error) => {
+          console.error('Error al registrar el carro:', error);
+        });
     }
   };
 
@@ -88,36 +87,37 @@ const Identify = ({ onSearch }) => {
       try {
         const response = await axios.post("http://localhost:3001/brands", { name: newBrand });
         const newBrandId = response.data.id;
-
+  
         const updatedBrands = await axios.get("http://localhost:3001/brands");
         setBrands(updatedBrands.data);
-
+  
         setFormData({ ...formData, brandId: newBrandId });
         setNewBrand('');
-
       } catch (error) {
         console.error('Error al guardar la nueva marca:', error);
       }
     }
-  };
+  };  
 
   const handleNewModel = async () => {
-    if (newModel) {
-      try {
-        const response = await axios.post("http://localhost:3001/models", { name: newModel });
-        const newModelId = response.data.id;
+  if (newModel && formData.brandId) {
+    try {
+      const response = await axios.post("http://localhost:3001/models", {
+        name: newModel,
+        brandId: formData.brandId, // Establece la relación con la marca seleccionada
+      });
 
-        const updatedModels = await axios.get("http://localhost:3001/models");
-        setModels(updatedModels.data);
+      const newModelId = response.data.id;
+      const updatedModels = await axios.get("http://localhost:3001/models");
+      setModels(updatedModels.data);
 
-        setFormData({ ...formData, modelId: newModelId });
-        setNewModel('');
-
-      } catch (error) {
-        console.error('Error al guardar el nuevo modelo:', error);
-      }
+      setFormData({ ...formData, modelId: newModelId });
+      setNewModel('');
+    } catch (error) {
+      console.error('Error al guardar el nuevo modelo:', error);
     }
-  };
+  }
+};
 
   const handleImageChange = (event) => {
     const imageFiles = event.target.files;
@@ -138,8 +138,8 @@ const Identify = ({ onSearch }) => {
           <select name="brandId" value={formData.brandId} onChange={handleInputChange}>
             <option key="" value="">Select brand</option>
             {brands.map((brandOption) => (
-              <option key={brandOption.id} value={brandOption.brand}>
-                {brandOption.brand}
+              <option key={brandOption.id} value={brandOption.id}>
+                {brandOption.name}
               </option>
             ))}
             {!onSearch && <option key="NuevaMarca" value="NuevaMarca">Nueva Marca</option>}
@@ -164,8 +164,8 @@ const Identify = ({ onSearch }) => {
           <select name="modelId" value={formData.modelId} onChange={handleInputChange}>
             <option value="">Select Model</option>
             {models.map((modelOption) => (
-              <option key={modelOption.id} value={modelOption.model}>
-                {modelOption.model}
+              <option key={modelOption.id} value={modelOption.id}>
+                {modelOption.name}
               </option>
             ))}
             {!onSearch && <option key="NuevoModelo" value="NuevoModelo">Nuevo Modelo</option>}
