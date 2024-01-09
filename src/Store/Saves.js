@@ -13,8 +13,8 @@ const db = mysql.createConnection ({
 });
 
 app.post("/create",(req,res)=>{
-  const brandId = req.body.brandId;
-  const modelId = req.body.modelId;
+ const brandId = req.body.brandId;
+ const modelId = req.body.modelId;
  const style = req.body.style;
  const transmission = req.body.transmission;
  const  price = req.body.price;
@@ -69,24 +69,22 @@ app.get("/brands", (req, res) => {
   });
 });
 
-/*
-
   // Realiza una consulta DELETE para eliminar el coche con el ID especificado
- app.delete("/cars/:carId", (req, res) => {
-  const carId = req.params.carId;
-  db.query('DELETE FROM cars WHERE id = ?', carId, (err, result) => {
-    if (err) {
-      console.log(err);
-      res.status(500).send("Error al eliminar el coche");
-    } else {
-      res.status(200).send("Coche eliminado exitosamente");
-    }
+  app.delete("/cars/:carId", (req, res) => {
+    const carId = +req.params.carId;
+    db.query('DELETE FROM cars WHERE id = ?', carId, (err, result) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send("Error al eliminar el coche");
+      } else {
+        res.status(200).send("Coche eliminado exitosamente");
+      }
+    });
   });
-});
 
 // Realiza una consulta DELETE para eliminar el brand con el ID especificado
 app.delete("/models/:modelId", (req, res) => {
-  const modelId = req.params.modelId;
+  const modelId = +req.params.modelId;
   db.query('DELETE FROM models WHERE id = ?', modelId, (err, result) => {
     if (err) {
       console.log(err);
@@ -99,7 +97,7 @@ app.delete("/models/:modelId", (req, res) => {
 
 // Realiza una consulta DELETE para eliminar el brand con el ID especificado
 app.delete("/brands/:brandId", (req, res) => {
-  const brandId = req.params.brandId;
+  const brandId = +req.params.brandId;
   db.query('DELETE FROM brands WHERE id = ?', brandId, (err, result) => {
     if (err) {
       console.log(err);
@@ -110,7 +108,6 @@ app.delete("/brands/:brandId", (req, res) => {
   });
 });
 
-*/
 // add a new brands
 app.post("/brands", (req, res) => {
   const newBrand = req.body.name; 
