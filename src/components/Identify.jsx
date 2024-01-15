@@ -21,10 +21,10 @@ const Identify = ({ onSearch }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const brandsResponse = await axios.get("http://localhost:3001/brands");
+        const brandsResponse = await axios.get("mysql://root:@localhost:3306/db_prisma?schema=public/brands");
         setBrands(brandsResponse.data);
 
-        const modelsResponse = await axios.get("http://localhost:3001/models");
+        const modelsResponse = await axios.get("ysql://root:@localhost:3306/db_prisma.models");
         setModels(modelsResponse.data);
       } catch (error) {
         console.error('Error al cargar la lista de marcas y modelos:', error);
@@ -43,7 +43,7 @@ const Identify = ({ onSearch }) => {
           setSearchResults(results);
         });
     } else {
-      axios.post("http://localhost:3001/create", carData)
+      axios.post("http://localhost:3306/create", carData)
         .then(() => {
           alert("Carro registrado");
           // Puedes realizar alguna acción adicional después de agregar el carro
@@ -86,10 +86,10 @@ const Identify = ({ onSearch }) => {
   const handleNewBrand = async () => {
     if (newBrand) {
       try {
-        const response = await axios.post("http://localhost:3001/brands", { name: newBrand });
+        const response = await axios.post("http://localhost:3306/brands", { name: newBrand });
         const newBrandId = response.data.id;
   
-        const updatedBrands = await axios.get("http://localhost:3001/brands");
+        const updatedBrands = await axios.get("mysql://root:@localhost:3306/db_prisma?schema=public/brands");
         setBrands(updatedBrands.data);
   
         setFormData({ ...formData, brandId: newBrandId });
@@ -103,13 +103,13 @@ const Identify = ({ onSearch }) => {
   const handleNewModel = async () => {
   if (newModel && formData.brandId) {
     try {
-      const response = await axios.post("http://localhost:3001/models", {
+      const response = await axios.post("mysql://root:@localhost:3306/brands", {
         name: newModel,
         brandId: formData.brandId, // Establece la relación con la marca seleccionada
       });
 
       const newModelId = response.data.id;
-      const updatedModels = await axios.get("http://localhost:3001/models");
+      const updatedModels = await axios.get("mysql://root:@localhost:3306/db_prisma?schema=public/brands");
       setModels(updatedModels.data);
 
       setFormData({ ...formData, modelId: newModelId });

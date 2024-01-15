@@ -10,8 +10,25 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Post {
-  id    Int     @id @default(autoincrement())
-  title String  
-  content  String?
-} 
+model cars {
+  id         Int       @id @default(autoincrement())
+  brand      brands     @relation(fields: [brandId], references: [id])
+  brandId    Int
+  model      models     @relation(fields: [modelId], references: [id])
+  modelId    Int
+  style      String
+  // ... otras propiedades
+  images     Json      // O usa un tipo adecuado para las imágenes
+}
+
+model brands {
+  id         Int       @id @default(autoincrement())
+  name       String
+  cars       cars[]
+}
+
+model models {
+  id         Int       @id @default(autoincrement())
+  name       String
+  cars       cars[]
+}
