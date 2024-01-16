@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import firebase from 'firebase/compat/app';
 
+
 const CarList = () => {
   const [cars, setCars] = useState([]);
   const [brands, setBrands] = useState([]);
@@ -14,7 +15,7 @@ const CarList = () => {
 
   useEffect(() => {
     // Realiza una solicitud GET para obtener la lista de coches
-    axios.get("//root:@localhost:3306/")
+    axios.get("mysql://root:@localhost:3306/db_prisma?schema=public")
       .then((response) => {
         setCars(response.data);
       })

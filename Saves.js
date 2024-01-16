@@ -155,3 +155,32 @@ app.post("/models", async (req, res) => {
   }
 });
 
+
+const PORT = 3306;
+app.listen(PORT, () => {
+  console.log(`Servidor en ejecución en el puerto ${PORT}`);
+});
+
+const main = async () => {
+  try {
+    await prisma.$disconnect();
+    console.log("Prisma desconectado exitosamente");
+  } catch (error) {
+    console.error("Error al desconectar Prisma:", error);
+    process.exit(1);
+  }
+};
+
+// Manejar la terminación de la aplicación
+process.on("SIGINT", async () => {
+  console.log("\nCerrando la aplicación de manera segura...");
+  await main();
+  process.exit(0);
+});
+
+// Manejar rechazos de promesas no manejados
+process.on("unhandledRejection", (reason, promise) => {
+  console.error("Rechazo no manejado en:", promise, "razón:", reason);
+  // Asegurar que Prisma se desconecte antes de salir debido a un rechazo no manejado
+  main().then(() => process.exit(1));
+});
