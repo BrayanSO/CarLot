@@ -8,6 +8,7 @@ import axios from 'axios';
 import firebase from 'firebase/compat/app';
 
 
+
 const CarList = () => {
   const [cars, setCars] = useState([]);
   const [brands, setBrands] = useState([]);
@@ -15,7 +16,7 @@ const CarList = () => {
 
   useEffect(() => {
     // Realiza una solicitud GET para obtener la lista de coches
-    axios.get("mysql://root:@localhost:3306/db_prisma?schema=public")
+    axios.get("http://localhost:3306/api/cars")
       .then((response) => {
         setCars(response.data);
       })
@@ -24,7 +25,7 @@ const CarList = () => {
       });
 
     // Realiza una solicitud GET para obtener la lista de marcas
-    axios.get("http://localhost:3306/brands")
+    axios.get("http://localhost:3306/api/brands")
       .then((response) => {
         setBrands(response.data);
       })
@@ -33,7 +34,7 @@ const CarList = () => {
       });
 
     // Realiza una solicitud GET para obtener la lista de modelos
-    axios.get("http://localhost:3306/models")
+    axios.get("http://localhost:3306/api/models")
       .then((response) => {
         setModels(response.data);
       })
@@ -61,7 +62,7 @@ const CarList = () => {
     if (isConfirmed) {
       try {
         // Realiza una solicitud DELETE para eliminar el coche por su ID
-        await axios.delete(`http://localhost:3001/cars/${carToDelete.id}`);
+        await axios.delete(`http://localhost:3306/api/cars/${carToDelete.id}`);
         const updatedCars = [...cars];
         updatedCars.splice(index, 1); // Elimina el coche del estado local
         setCars(updatedCars); // Actualiza la vista eliminando el coche
@@ -69,7 +70,7 @@ const CarList = () => {
         // Si la marca y el modelo no están en uso, elimina también de la lista de marcas y modelos
         if (!brandInUse) {
           // Realiza una solicitud DELETE para eliminar la marca (ajusta la URL según tu API)
-          await axios.delete(`http://localhost:3001/brands/${carToDelete.brand}`);
+          await axios.delete(`http://localhost:3306/api/brands/${carToDelete.brand}`);
           // Actualiza la lista de marcas local
           const updatedBrands = brands.filter((brand) => brand.id !== carToDelete.brand);
           setBrands(updatedBrands);
@@ -77,7 +78,7 @@ const CarList = () => {
 
         if (!modelInUse) {
           // Realiza una solicitud DELETE para eliminar el modelo (ajusta la URL según tu API)
-          await axios.delete(`http://localhost:3001/models/${carToDelete.model}`);
+          await axios.delete(`http://localhost:3306/api/models/${carToDelete.model}`);
           // Actualiza la lista de modelos local
           const updatedModels = models.filter((model) => model.id !== carToDelete.model);
           setModels(updatedModels);
