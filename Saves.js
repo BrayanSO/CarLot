@@ -5,8 +5,12 @@ const multer = require("multer");
 const cors = require("cors");
 
 const prisma = new PrismaClient();
+const PORT = process.env.PORT || 3001
 
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3001',  // Ajusta el puerto según tu aplicación React
+  credentials: true,
+}));
 app.use(express.json());
 
 const storage = multer.diskStorage({
@@ -46,6 +50,18 @@ app.post("/create", upload.array("images", 5), async (req, res) => {
     res.status(500).send("Error al agregar el coche");
   }
 });
+
+// Obtener todos los autos
+app.get("/cars", async (req, res) => {
+  try {
+    const cars = await prisma.cars.findMany();
+    res.json(cars);
+  } catch (error) {
+    console.error("Error al obtener los autos:", error);
+    res.status(500).send("Error al obtener todos los autos");
+  }
+});
+
 
 // Obtener todas las marcas
 app.get("/brands", async (req, res) => {
@@ -156,9 +172,8 @@ app.post("/models", async (req, res) => {
 });
 
 
-const PORT = 3306;
 app.listen(PORT, () => {
-  console.log(`Servidor en ejecución en el puerto ${PORT}`);
+  console.log(`Servidor corriendo en http://tu_dominio_o_ip:${PORT}`);
 });
 
 const main = async () => {

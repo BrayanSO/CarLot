@@ -21,10 +21,10 @@ const Identify = ({ onSearch }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const brandsResponse = await axios.get("mysql://root:@localhost:3306/db_prisma?schema=public/brands");
+        const brandsResponse = await axios.get("/brands");
         setBrands(brandsResponse.data);
 
-        const modelsResponse = await axios.get("ysql://root:@localhost:3306/db_prisma.models");
+        const modelsResponse = await axios.get("/models");
         setModels(modelsResponse.data);
       } catch (error) {
         console.error('Error al cargar la lista de marcas y modelos:', error);
