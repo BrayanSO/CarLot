@@ -16,7 +16,7 @@ const CarList = () => {
 
   useEffect(() => {
     // Realiza una solicitud GET para obtener la lista de coches
-    axios.get('/cars')
+    axios.get('http://localhost:3001/cars')
       .then((response) => {
         setCars(response.data);
       })
@@ -25,7 +25,7 @@ const CarList = () => {
       });
 
     // Realiza una solicitud GET para obtener la lista de marcas
-    axios.get("/brands")
+    axios.get("http://localhost:3001/brands")
       .then((response) => {
         setBrands(response.data);
       })
@@ -34,7 +34,7 @@ const CarList = () => {
       });
 
     // Realiza una solicitud GET para obtener la lista de modelos
-    axios.get("/models")
+    axios.get("http://localhost:3001/models")
       .then((response) => {
         setModels(response.data);
       })

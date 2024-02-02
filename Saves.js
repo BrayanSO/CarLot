@@ -8,7 +8,7 @@ const prisma = new PrismaClient();
 const PORT = process.env.PORT || 3001
 
 app.use(cors({
-  origin: 'http://localhost:3001',  // Ajusta el puerto según tu aplicación React
+  origin: 'http://localhost:3000',  // Ajusta el puerto según tu aplicación React
   credentials: true,
 }));
 app.use(express.json());
@@ -35,7 +35,7 @@ app.post("/create", upload.array("images", 5), async (req, res) => {
         modelId: parseInt(modelId),
         style,
         transmission,
-        price: parseFloat(price),
+        price,
         fuel,
         doors: parseInt(doors),
         kilometres: parseFloat(kilometres),

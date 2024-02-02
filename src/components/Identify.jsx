@@ -5,6 +5,8 @@ import CarList from "../components/CarList";
 import axios from 'axios';
 import ImageUpload from './ImageUpload.jsx';
 
+
+
 const Identify = ({ onSearch }) => {
   const [formData, setFormData] = useState({
     brandId: '', modelId: '', style: '', transmission: '', price: '', fuel: '', kilometres: '', doors: '', images: []
@@ -21,10 +23,10 @@ const Identify = ({ onSearch }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const brandsResponse = await axios.get("/brands");
+        const brandsResponse = await axios.get("http://localhost:3001/brands");
         setBrands(brandsResponse.data);
 
-        const modelsResponse = await axios.get("/models");
+        const modelsResponse = await axios.get("http://localhost:3001/models");
         setModels(modelsResponse.data);
       } catch (error) {
         console.error('Error al cargar la lista de marcas y modelos:', error);
@@ -43,7 +45,7 @@ const Identify = ({ onSearch }) => {
           setSearchResults(results);
         });
     } else {
-      axios.post("http://localhost:3306/create", carData)
+      axios.post("http://localhost:3001/create", carData)
         .then(() => {
           alert("Carro registrado");
           // Puedes realizar alguna acción adicional después de agregar el carro
@@ -86,10 +88,10 @@ const Identify = ({ onSearch }) => {
   const handleNewBrand = async () => {
     if (newBrand) {
       try {
-        const response = await axios.post("http://localhost:3306/brands", { name: newBrand });
+        const response = await axios.post("http://localhost:3001/brands", { name: newBrand });
         const newBrandId = response.data.id;
   
-        const updatedBrands = await axios.get("mysql://root:@localhost:3306/db_prisma?schema=public/brands");
+        const updatedBrands = await axios.get("http://localhost:3001/brands");
         setBrands(updatedBrands.data);
   
         setFormData({ ...formData, brandId: newBrandId });
@@ -103,13 +105,13 @@ const Identify = ({ onSearch }) => {
   const handleNewModel = async () => {
   if (newModel && formData.brandId) {
     try {
-      const response = await axios.post("mysql://root:@localhost:3306/brands", {
+      const response = await axios.post("http://localhost:3001/models", {
         name: newModel,
         brandId: formData.brandId, // Establece la relación con la marca seleccionada
       });
 
       const newModelId = response.data.id;
-      const updatedModels = await axios.get("mysql://root:@localhost:3306/db_prisma?schema=public/brands");
+      const updatedModels = await axios.get("http://localhost:3001/models");
       setModels(updatedModels.data);
 
       setFormData({ ...formData, modelId: newModelId });
